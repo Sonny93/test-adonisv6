@@ -1,12 +1,9 @@
 import MessageForm from '@/components/MessageForm'
+import MessageList from '@/components/MessageList/MessageList'
+import UserList from '@/components/UserList/UserList'
 import TransmitContext from '@/contexts/transmitContext'
-import useSubscribe from '@/hooks/useSubscribe'
 import { Transmit } from '@adonisjs/transmit-client'
-import React, { useMemo, useRef } from 'react'
-
-type Message = {
-  content: string
-}
+import { useMemo } from 'react'
 
 export default function HomeWrapper() {
   const transmit = useMemo(
@@ -33,27 +30,12 @@ export default function HomeWrapper() {
 }
 
 function Home() {
-  const ref = useRef<HTMLUListElement>(null)
-  const messages = useSubscribe<Message>('chat', {
-    onNewData: () =>
-      ref.current?.scrollTo({
-        top: ref.current?.scrollHeight,
-        behavior: 'smooth',
-      }),
-  })
   return (
     <>
       <h1>coucou</h1>
+      <UserList />
       <MessageForm />
-      <ul ref={ref} style={{ height: '250px', display: 'block', overflow: 'auto' }}>
-        {messages.map((message) => (
-          <MessageItem message={message} key={message.content} />
-        ))}
-      </ul>
+      <MessageList />
     </>
   )
-}
-
-function MessageItem({ message }: Readonly<{ message: Message }>) {
-  return <li>{message.content}</li>
 }

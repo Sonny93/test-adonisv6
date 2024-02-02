@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function MessageForm() {
   return (
     <form action="/chat" method="post">
