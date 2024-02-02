@@ -16,7 +16,7 @@ router.get('/', ({ inertia }: HttpContext) => {
 })
 router.post('/chat', ({ request, response }) => {
   const message = request.input('message')
-  transmit.broadcast('chat', { message })
+  transmit.broadcast('chat', { content: message })
   console.log('ok', message)
   return response.noContent()
 })

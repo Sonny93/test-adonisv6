@@ -5,6 +5,6 @@ transmit.on('broadcast', console.log)
 
 setInterval(() => {
   transmit.broadcast('chat', {
-    message: Date.now().toString(),
+    content: Date.now().toString(),
   })
-}, 1000)
+}, 500)
