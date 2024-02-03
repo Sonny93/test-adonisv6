@@ -54,10 +54,12 @@
     "vite": "^5.0.12"
   },
   "dependencies": {
+    "@adonisjs/ally": "^5.0.2",
     "@adonisjs/auth": "^9.1.1",
     "@adonisjs/core": "^6.2.2",
     "@adonisjs/inertia": "^1.0.0-7",
     "@adonisjs/lucid": "^20.1.0",
+    "@adonisjs/redis": "^8.0.1",
     "@adonisjs/session": "^7.1.1",
     "@adonisjs/shield": "^8.1.0",
     "@adonisjs/static": "^1.1.1",
@@ -65,13 +67,15 @@
     "@adonisjs/transmit-client": "^0.1.4",
     "@adonisjs/vite": "^2.0.2",
     "@inertiajs/react": "^1.0.14",
+    "@types/uuid": "^9.0.8",
     "@vinejs/vine": "^1.7.1",
-    "better-sqlite3": "^9.3.0",
     "edge.js": "^6.0.1",
     "luxon": "^3.4.4",
+    "pg": "^8.11.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "reflect-metadata": "^0.2.1"
+    "reflect-metadata": "^0.2.1",
+    "uuid": "^9.0.1"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"

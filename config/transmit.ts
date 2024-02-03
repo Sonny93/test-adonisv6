@@ -1,5 +1,7 @@
-import { defineConfig } from '@adonisjs/transmit'
+import { RedisTransport, defineConfig } from '@adonisjs/transmit'
 
 export default defineConfig({
-  transport: null,
+  transport: {
+    driver: RedisTransport,
+  },
 })

@@ -3,6 +3,14 @@ type Message = {
 }
 
 type User = {
-  uid: string
-  username: string
+  accessToken: string
+  avatarUrl: string
+  createdAt: string
+  email: string
+  id: string
+  isVerified: boolean
+  name: string
+  nickName: string
+  original: string
+  updatedAt: string
 }

@@ -32,7 +32,7 @@ export default function HomeWrapper() {
 function Home() {
   return (
     <>
-      <h1>coucou</h1>
+      <h1>Hello</h1>
       <UserList />
       <MessageForm />
       <MessageList />

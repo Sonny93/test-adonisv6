@@ -1,0 +1,33 @@
+name: redis
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+      - ./docker-config/postgres-dev-init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - ${DB_PORT}:5432
+
+  redis:
+    container_name: redis
+    image: redis:7
+    command: redis-server --save 30 1 --loglevel warning
+    ports:
+      - 6379:6379
+  redisinsight:
+    volumes:
+      - redisinsight:/db
+    ports:
+      - 8001:8001
+    image: redislabs/redisinsight:latest # TODO: change tag version (currently 7)
+
+volumes:
+  postgres_volume:
+    name: postgres_test_adonisv6
+  redisinsight:
+    name: redisinsight
