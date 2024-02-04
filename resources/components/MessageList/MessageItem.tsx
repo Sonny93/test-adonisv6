@@ -4,7 +4,6 @@ dayjs.extend(relativeTime)
 
 export default function MessageItem({ message }: Readonly<{ message: Message }>) {
   const { author: user, type, content } = message
-  console.log(message)
   if (type === 'system') {
     return <li css={{ fontSize: '.85em', color: '#999' }}>system - {content}</li>
   }

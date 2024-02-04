@@ -1,7 +1,9 @@
+import useChannel from '@/hooks/useChannel'
 import { useForm } from '@inertiajs/react'
 import { useCallback, useMemo } from 'react'
 
-export default function CreateMessageForm({ channelId }: { channelId: Channel['id'] }) {
+export default function CreateMessageForm() {
+  const { channel } = useChannel()
   const { data, setData, reset, processing, errors } = useForm({
     content: '',
   })
@@ -10,7 +12,7 @@ export default function CreateMessageForm({ channelId }: { channelId: Channel['i
   const handleSubmit = useCallback(
     async (event) => {
       event.preventDefault()
-      await fetch(`/channels/${channelId}/messages`, {
+      await fetch(`/channels/${channel.id}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +44,7 @@ export default function CreateMessageForm({ channelId }: { channelId: Channel['i
           border: '1px solid #888',
           padding: '.6em',
         }}
-        max={5000}
+        maxLength={5000}
         autoFocus
       />
       {errors.content && <div>{errors.content}</div>}

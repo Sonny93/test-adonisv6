@@ -1,61 +1,45 @@
 import CreateMessageForm from '@/components/CreateMessageForm'
 import MessageList from '@/components/MessageList/MessageList'
 import UserList from '@/components/UserList/UserList'
-import TransmitContext from '@/contexts/transmitContext'
-import { Transmit } from '@adonisjs/transmit-client'
-import { useMemo } from 'react'
+import { ChannelContextProvider } from '@/contexts/channelContext'
+import { MessagesContextProvider } from '@/contexts/messagesContext'
+import { TransmitContextProvider } from '@/contexts/transmitContext'
+import useChannel from '@/hooks/useChannel'
 
-export default function ChannelPageWrapper({ channel }: { channel: ChannelExtended }) {
-  const transmit = useMemo(
-    () =>
-      new Transmit({
-        baseUrl: 'http://localhost:3333',
-        maxReconnectAttempts: 5,
-        removeSubscriptionOnZeroListener: true,
-        onSubscribeFailed: console.log,
-        onReconnectAttempt: console.log,
-        onReconnectFailed: console.log,
-        beforeSubscribe: console.log,
-        beforeUnsubscribe: console.log,
-        onSubscription: console.log,
-        onUnsubscription: console.log,
-      }),
-    []
-  )
+export default function ChannelPage({ channel }: { channel: ChannelExtended }) {
   return (
-    <TransmitContext.Provider value={{ transmit }}>
-      <ChannelPage channel={channel} />
-    </TransmitContext.Provider>
+    <TransmitContextProvider>
+      <ChannelContextProvider channel={channel}>
+        <MessagesContextProvider messages={channel.messages}>
+          <div
+            css={{
+              height: '100%',
+              padding: '1em',
+              display: 'flex',
+              flex: '1',
+              gap: '.5em',
+            }}
+          >
+            <UserList />
+            <div
+              css={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <ChannelName />
+              <MessageList />
+              <CreateMessageForm />
+            </div>
+          </div>
+        </MessagesContextProvider>
+      </ChannelContextProvider>
+    </TransmitContextProvider>
   )
 }
 
-function ChannelPage({ channel }: { channel: ChannelExtended }) {
-  return (
-    <div
-      css={{
-        height: '100%',
-        padding: '1em',
-        display: 'flex',
-        flex: '1',
-        gap: '.5em',
-      }}
-    >
-      <UserList />
-      <div
-        css={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <ChannelName channel={channel} />
-        <MessageList messages={channel.messages} />
-        <CreateMessageForm channelId={channel.id} />
-      </div>
-    </div>
-  )
-}
-
-function ChannelName({ channel }: { channel: ChannelExtended }) {
+function ChannelName() {
+  const { channel } = useChannel()
   return <div>{channel.name}</div>
 }

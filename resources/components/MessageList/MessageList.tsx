@@ -1,9 +1,11 @@
+import useMessages from '@/hooks/useMessages'
 import useSubscribe from '@/hooks/useSubscribe'
 import { css } from '@emotion/react'
 import { useEffect, useRef } from 'react'
 import MessageItem from './MessageItem'
 
-export default function MessageList({ messages }: { messages: Message[] }) {
+export default function MessageList() {
+  const { messages } = useMessages()
   const ref = useRef<HTMLUListElement>(null)
 
   const scrollBottom = (smooth = true) =>
@@ -13,10 +15,7 @@ export default function MessageList({ messages }: { messages: Message[] }) {
     })
   const allMessages = useSubscribe<Message>('chat', {
     initData: messages,
-    onNewData: (data) => {
-      scrollBottom()
-      console.log(data)
-    },
+    onNewData: () => scrollBottom(),
   })
 
   useEffect(() => scrollBottom(false), [])

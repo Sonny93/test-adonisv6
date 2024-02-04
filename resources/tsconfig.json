@@ -5,6 +5,7 @@
     "lib": ["DOM", "ESNext", "DOM.Iterable", "ES2020"],
     "jsxImportSource": "@emotion/react",
     "useDefineForClassFields": true,
+    "strict": false,
     "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "Bundler",
