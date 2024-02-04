@@ -1,6 +1,8 @@
 import useChannel from '@/hooks/useChannel'
 import { useForm } from '@inertiajs/react'
 import { useCallback, useMemo } from 'react'
+import Button from './Form/Button'
+import TextField from './Form/TextField'
 
 export default function CreateMessageForm() {
   const { channel } = useChannel()
@@ -34,23 +36,18 @@ export default function CreateMessageForm() {
         justifyContent: 'center',
       }}
     >
-      <input
+      <TextField
         type="text"
         onChange={(e) => setData('content', e.target.value)}
         value={data.content}
         placeholder="Your message"
-        css={{
-          width: '100%',
-          border: '1px solid #888',
-          padding: '.6em',
-        }}
         maxLength={5000}
         autoFocus
       />
       {errors.content && <div>{errors.content}</div>}
-      <button type="submit" css={{ padding: '.5em .75em' }} disabled={isFormDisabled}>
+      <Button type="submit" disabled={isFormDisabled}>
         send
-      </button>
+      </Button>
     </form>
   )
 }

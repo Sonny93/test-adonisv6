@@ -1,32 +1,38 @@
-import { useForm } from '@inertiajs/react';
-import { useMemo } from 'react';
+import { useForm } from '@inertiajs/react'
+import { useMemo } from 'react'
+import Button from './Form/Button'
+import TextField from './Form/TextField'
 
 export default function CreateChannelForm() {
   const { data, setData, post, processing, errors } = useForm({
     name: '',
-  });
-  const isFormDisabled = useMemo(
-    () => processing || data.name.length === 0,
-    [processing, data]
-  );
+  })
+  const isFormDisabled = useMemo(() => processing || data.name.length === 0, [processing, data])
 
   function submit(e) {
-    e.preventDefault();
-    post('/channels');
+    e.preventDefault()
+    post('/channels')
   }
 
   return (
-    <form onSubmit={submit}>
-      <h2>create channel</h2>
-      <input
+    <form
+      onSubmit={submit}
+      css={{
+        display: 'flex',
+        gap: '.35em',
+        flexDirection: 'column',
+      }}
+    >
+      <TextField
         type="text"
         value={data.name}
         onChange={(e) => setData('name', e.target.value)}
+        placeholder="New channel"
       />
       {errors.name && <div>{errors.name}</div>}
-      <button type="submit" disabled={isFormDisabled}>
-        create
-      </button>
+      <Button type="submit" disabled={isFormDisabled}>
+        Create
+      </Button>
     </form>
-  );
+  )
 }
