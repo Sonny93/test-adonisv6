@@ -20,7 +20,6 @@ router
   .group(() => {
     router.get('/', [MessagesController, 'index'])
     router.get('/logout', [UserController, 'logout'])
-    router.post('/chat', [MessagesController, 'createMessage'])
 
     router.post('/channels', [ChannelsController, 'create'])
     router.get('/channels/:channel_id', [ChannelsController, 'renderFromChannelId'])

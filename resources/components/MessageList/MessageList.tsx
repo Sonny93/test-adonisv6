@@ -1,3 +1,4 @@
+import useChannel from '@/hooks/useChannel'
 import useMessages from '@/hooks/useMessages'
 import useSubscribe from '@/hooks/useSubscribe'
 import { css } from '@emotion/react'
@@ -6,6 +7,7 @@ import MessageItem from './MessageItem'
 
 export default function MessageList() {
   const { messages } = useMessages()
+  const { channel } = useChannel()
   const ref = useRef<HTMLUListElement>(null)
 
   const scrollBottom = (smooth = true) =>
@@ -13,7 +15,7 @@ export default function MessageList() {
       top: ref.current?.scrollHeight,
       behavior: smooth ? 'smooth' : 'instant',
     })
-  const allMessages = useSubscribe<Message>('chat', {
+  const allMessages = useSubscribe<Message>(`channels/${channel.id}`, {
     initData: messages,
     onNewData: () => scrollBottom(),
   })
