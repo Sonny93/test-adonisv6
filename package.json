@@ -59,16 +59,18 @@
     "@adonisjs/core": "^6.2.2",
     "@adonisjs/inertia": "^1.0.0-7",
     "@adonisjs/lucid": "^20.1.0",
-    "@adonisjs/redis": "^8.0.1",
     "@adonisjs/session": "^7.1.1",
     "@adonisjs/shield": "^8.1.0",
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/transmit": "^0.2.3",
     "@adonisjs/transmit-client": "^0.1.4",
     "@adonisjs/vite": "^2.0.2",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "@inertiajs/react": "^1.0.14",
     "@types/uuid": "^9.0.8",
     "@vinejs/vine": "^1.7.1",
+    "dayjs": "^1.11.10",
     "edge.js": "^6.0.1",
     "luxon": "^3.4.4",
     "pg": "^8.11.3",
@@ -78,7 +80,14 @@
     "uuid": "^9.0.1"
   },
   "eslintConfig": {
-    "extends": "@adonisjs/eslint-config/app"
+    "extends": "@adonisjs/eslint-config/app",
+    "plugins": [
+      "@adonisjs/eslint-plugin"
+    ],
+    "rules": {
+      "@adonisjs/prefer-lazy-controller-import": "error",
+      "@adonisjs/prefer-lazy-listener-import": "error"
+    }
   },
   "prettier": "@adonisjs/prettier-config"
 }

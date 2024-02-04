@@ -3,6 +3,7 @@
     "target": "ESNext",
     "jsx": "react-jsx",
     "lib": ["DOM", "ESNext", "DOM.Iterable", "ES2020"],
+    "jsxImportSource": "@emotion/react",
     "useDefineForClassFields": true,
     "baseUrl": ".",
     "module": "ESNext",
@@ -18,5 +19,5 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
   },
-  "include": ["env.d.ts", "./**/*.ts", "./**/*.tsx"],
+  "include": ["./**/*.ts", "./**/*.tsx"],
 }
