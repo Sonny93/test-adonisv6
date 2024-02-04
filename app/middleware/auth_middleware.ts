@@ -1,4 +1,3 @@
-import env from '#start/env'
 import type { Authenticators } from '@adonisjs/auth/types'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
@@ -11,7 +10,7 @@ export default class AuthMiddleware {
   /**
    * The URL to redirect to, when authentication fails
    */
-  redirectTo = env.get('DISCORD_CLIENT_CALLBACK_URL')
+  redirectTo = '/discord/redirect'
 
   async handle(
     ctx: HttpContext,

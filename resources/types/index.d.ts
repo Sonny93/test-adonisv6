@@ -1,16 +1,30 @@
 type Message = {
+  author?: User
+  type: 'system' | 'user'
   content: string
+  createdAt: string
+  updatedAt: string
 }
 
 type User = {
-  accessToken: string
-  avatarUrl: string
-  createdAt: string
-  email: string
   id: string
-  isVerified: boolean
   name: string
   nickName: string
-  original: string
+  avatarUrl: string
+  createdAt: string
   updatedAt: string
+}
+
+type Channel = {
+  id: string
+  name: string
+  author: User
+  createdAt: string
+  updatedAt: string
+}
+
+type ChannelExtended = Channel & {
+  author: User
+  users: User[]
+  messages: Message[]
 }

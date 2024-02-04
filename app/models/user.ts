@@ -21,7 +21,7 @@ export default class User extends compose(AppBaseModel, AuthFinder) {
   @column({ isPrimary: true })
   declare id: string
 
-  @column()
+  @column({ serializeAs: null })
   declare email: string | null
 
   @column({ serializeAs: 'nickName' })
@@ -30,17 +30,17 @@ export default class User extends compose(AppBaseModel, AuthFinder) {
   @column()
   declare name: string
 
-  @column({ serializeAs: 'isVerified' })
+  @column({ serializeAs: null })
   declare isVerified: boolean
 
   @column({ serializeAs: 'avatarUrl' })
   declare avatarUrl: string | null
 
-  @column()
+  @column({ serializeAs: null })
   declare accessToken: (Oauth2AccessToken | Oauth1AccessToken)['token']
 
   @column({
-    serialize: (value: any) => JSON.stringify(value),
+    serializeAs: null,
   })
   declare original: string
 
