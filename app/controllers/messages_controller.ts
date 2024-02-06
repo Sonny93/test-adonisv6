@@ -25,10 +25,10 @@ export default class MessagesController {
         authorId: auth.user?.id,
         channelId,
       })
+      await message.load('author')
       transmit.broadcast(`channels/${channel.id}`, {
         type: 'user',
-        author: auth.user,
-        content: message.content,
+        ...message.serialize(),
       })
 
       return response.json({

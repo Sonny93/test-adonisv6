@@ -1,4 +1,5 @@
 type Message = {
+  id: string
   author?: User
   type: 'system' | 'user'
   content: string

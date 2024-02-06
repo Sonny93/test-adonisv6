@@ -24,6 +24,7 @@ router
     router.post('/channels', [ChannelsController, 'create'])
     router.get('/channels/:channel_id', [ChannelsController, 'renderFromChannelId'])
     router.post('/channels/:channel_id/messages', [MessagesController, 'createMessage'])
+    router.post('/channels/:channel_id/typing', [ChannelsController, 'typing'])
   })
   .middleware([middleware.auth()])
 

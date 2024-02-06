@@ -1,6 +1,7 @@
 import CreateMessageForm from '@/components/CreateMessageForm'
 import MessageList from '@/components/MessageList/MessageList'
 import UserList from '@/components/UserList/UserList'
+import WhosTyping from '@/components/WhosTypings/WhosTypings'
 import { ChannelContextProvider } from '@/contexts/channelContext'
 import { MessagesContextProvider } from '@/contexts/messagesContext'
 import { TransmitContextProvider } from '@/contexts/transmitContext'
@@ -38,6 +39,7 @@ export default function ChannelPage({ channel }: { channel: ChannelExtended }) {
             >
               <ChannelName />
               <MessageList />
+              <WhosTyping />
               <CreateMessageForm />
             </div>
           </div>

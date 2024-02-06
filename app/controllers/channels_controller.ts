@@ -1,6 +1,7 @@
 import Channel from '#models/channel'
 import { createChannelValidator } from '#validators/channel'
 import { HttpContext } from '@adonisjs/core/http'
+import transmit from '@adonisjs/transmit/services/main'
 
 export default class ChannelsController {
   async getAllChannels() {
@@ -33,5 +34,10 @@ export default class ChannelsController {
         .load('users')
     })
     return channel
+  }
+
+  async typing({ request, auth }: HttpContext) {
+    const channelId = request.param('channel_id')
+    transmit.broadcast(`channels/${channelId}/typing`, { user: auth.user! })
   }
 }

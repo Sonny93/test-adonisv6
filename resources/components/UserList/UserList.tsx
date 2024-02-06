@@ -1,8 +1,25 @@
 import useSubscribe from '@/hooks/useSubscribe'
+import { useState } from 'react'
 import UserItem from './UserItem'
 
+type EventData = {
+  uid: string
+}
+
 export default function UserList() {
-  const users = useSubscribe<User>('user_connected')
+  const [users, setUsers] = useState<string[]>([])
+  useSubscribe<EventData>('user_connected', ({ uid }) => {
+    setUsers((users) => [...users, uid])
+  })
+  useSubscribe<EventData>('user_disconnected', ({ uid }) => {
+    setUsers((users) => {
+      const userIndex = users.indexOf(uid)
+      if (userIndex !== -1) {
+        users.splice(userIndex, 1)
+      }
+      return users
+    })
+  })
 
   return (
     <ul
@@ -17,7 +34,7 @@ export default function UserList() {
       }}
     >
       {users.map((user) => (
-        <UserItem user={user} key={user.id} />
+        <UserItem user={user} key={user} />
       ))}
     </ul>
   )

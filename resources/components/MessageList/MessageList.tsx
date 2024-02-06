@@ -1,12 +1,16 @@
 import useChannel from '@/hooks/useChannel'
 import useMessages from '@/hooks/useMessages'
-import useSubscribe from '@/hooks/useSubscribe'
+import useNewMessageEvent from '@/hooks/useNewMessageEvent'
 import { css } from '@emotion/react'
 import { useEffect, useRef } from 'react'
 import MessageItem from './MessageItem'
 
+type EventData = {
+  type: 'user' | 'system'
+} & Message
+
 export default function MessageList() {
-  const { messages } = useMessages()
+  const { messages, addMessage } = useMessages()
   const { channel } = useChannel()
   const ref = useRef<HTMLUListElement>(null)
 
@@ -15,9 +19,9 @@ export default function MessageList() {
       top: ref.current?.scrollHeight,
       behavior: smooth ? 'smooth' : 'instant',
     })
-  const allMessages = useSubscribe<Message>(`channels/${channel.id}`, {
-    initData: messages,
-    onNewData: () => scrollBottom(),
+  useNewMessageEvent(channel.id, (message) => {
+    addMessage(message)
+    setTimeout(scrollBottom)
   })
 
   useEffect(() => scrollBottom(false), [])
@@ -35,7 +39,7 @@ export default function MessageList() {
         overflow: 'auto',
       })}
     >
-      {allMessages.map((message, index) => (
+      {messages.map((message, index) => (
         <MessageItem message={message} key={message.content + index} />
       ))}
     </ul>
