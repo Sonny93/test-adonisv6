@@ -26,7 +26,7 @@ export default class MessagesController {
         channelId,
       })
       await message.load('author')
-      transmit.broadcast(`channels/${channel.id}`, {
+      transmit.broadcast(`channels/${channel.id}/messages`, {
         type: 'user',
         ...message.serialize(),
       })

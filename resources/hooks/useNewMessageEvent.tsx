@@ -8,5 +8,5 @@ export default function useNewMessageEvent(
   channelId: Channel['id'],
   cb: (newData: MessageEventData) => void
 ) {
-  useSubscribe<MessageEventData>(`channels/${channelId}`, cb)
+  useSubscribe<MessageEventData>(`channels/${channelId}/messages`, cb)
 }

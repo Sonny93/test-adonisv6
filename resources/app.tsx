@@ -9,10 +9,12 @@ createInertiaApp({
     return pages[`./pages/${name}.tsx`]
   },
   setup({ el, App, props }) {
-    createRoot(el).render(<>
-      <App {...props} />
-      <Global styles={cssReset} />
-      <Global styles={htmlBodyStyle} />
-    </>)
+    createRoot(el).render(
+      <>
+        <App {...props} />
+        <Global styles={cssReset} />
+        <Global styles={htmlBodyStyle} />
+      </>
+    )
   },
 })

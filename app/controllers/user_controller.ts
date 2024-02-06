@@ -5,12 +5,10 @@ import logger from '@adonisjs/core/services/logger'
 export default class UsersController {
   private redirectTo = '/'
 
-  public discord = ({ ally }: HttpContext) => ally.use('discord').redirect()
+  discord = ({ ally }: HttpContext) => ally.use('discord').redirect()
 
-  public async callbackAuth({ ally, auth, response, session }: HttpContext) {
+  async callbackAuth({ ally, auth, response, session }: HttpContext) {
     const discord = ally.use('discord')
-
-    // TODO: refacto
     if (discord.accessDenied()) {
       session.flash('flash', 'Access was denied')
       return response.redirect(this.redirectTo)
@@ -45,7 +43,7 @@ export default class UsersController {
     response.redirect('/')
   }
 
-  public async logout({ auth, response, session }: HttpContext) {
+  async logout({ auth, response, session }: HttpContext) {
     await auth.use('web').logout()
     session.flash('flash', 'Successfully disconnected')
     logger.info(`[${auth.user?.email}] disconnected successfully`)
