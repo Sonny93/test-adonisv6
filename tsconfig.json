@@ -24,9 +24,9 @@
       "#tests/*": ["./tests/*.js"],
       "#start/*": ["./start/*.js"],
       "#config/*": ["./config/*.js"],
-      "#constants/*": ["./constants/*.js"],
-    },
+      "#constants/*": ["./constants/*.js"]
+    }
   },
   "include": ["./**/*"],
-  "exclude": ["./resources/**/*"],
+  "exclude": ["./resources/**/*"]
 }

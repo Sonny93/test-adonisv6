@@ -11,6 +11,7 @@ const MessagesController = () => import('#controllers/messages_controller')
 const UserController = () => import('#controllers/user_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const RtpController = () => import('#controllers/rtp_controller')
 const ChannelsController = () => import('#controllers/channels_controller')
 
 router.get('/discord/redirect', [UserController, 'discord'])
@@ -25,6 +26,8 @@ router
     router.get('/channels/:channel_id', [ChannelsController, 'renderFromChannelId'])
     router.post('/channels/:channel_id/messages', [MessagesController, 'createMessage'])
     router.post('/channels/:channel_id/typing', [ChannelsController, 'typing'])
+
+    router.get('/server-capabilities', [RtpController, 'getRtpCapabilities'])
   })
   .middleware([middleware.auth()])
 

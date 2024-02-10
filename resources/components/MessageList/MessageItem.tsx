@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import RoundedImage from '../RoundedImage'
 dayjs.extend(relativeTime)
 
 export default function MessageItem({ message }: Readonly<{ message: Message }>) {
@@ -10,14 +11,9 @@ export default function MessageItem({ message }: Readonly<{ message: Message }>)
 
   return (
     <li css={{ display: 'flex', gap: '.25em' }}>
-      <img
+      <RoundedImage
         src={user.avatarUrl}
         alt={`${user.nickName}'s avatar`}
-        css={{
-          height: '24px',
-          width: '24px',
-          borderRadius: '50%',
-        }}
       />
       <div
         css={{
