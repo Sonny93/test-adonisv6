@@ -1,9 +1,14 @@
 import Channel from '#models/channel'
 import { createChannelValidator } from '#validators/channel'
+import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import transmit from '@adonisjs/transmit/services/main'
+import RtpController from './rtp_controller.js'
 
+@inject()
 export default class ChannelsController {
+  constructor(protected rtpController: RtpController) {}
+
   async getAllChannels() {
     return await Channel.all()
   }
@@ -19,7 +24,11 @@ export default class ChannelsController {
 
   async renderFromChannelId({ request, inertia }: HttpContext) {
     const channel = await this.getChannelById(request.param('channel_id'))
-    return inertia.render('channel', { channel })
+    const routerRtpCapabilities = this.rtpController.getRtpCapabilities()
+    return inertia.render('channel', {
+      channel,
+      routerRtpCapabilities,
+    })
   }
 
   async getChannelById(channelId: Channel['id']) {

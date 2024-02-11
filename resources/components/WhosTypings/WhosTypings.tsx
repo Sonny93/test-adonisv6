@@ -45,10 +45,10 @@ export default function WhosTyping() {
   return (
     <div css={{ fontSize: '.85em', height: '21px', marginTop: '.35em' }}>
       {typings.map(({ user, expiration }, index) => (
-        <>
+        <span key={user.id + expiration}>
           {!!index && ', '}
           <TypingItem user={user} expiration={expiration} removeUser={removeTypingUser} />
-        </>
+        </span>
       ))}{' '}
       {typings.length !== 0 && label}
     </div>

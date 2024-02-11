@@ -5,10 +5,24 @@ import UserList from '@/components/UserList/UserList'
 import WhosTyping from '@/components/WhosTypings/WhosTypings'
 import { ChannelContextProvider } from '@/contexts/channelContext'
 import { MessagesContextProvider } from '@/contexts/messagesContext'
+import { RtpDeviceContextProvider } from '@/contexts/rtpDeviceContext'
 import { TransmitContextProvider } from '@/contexts/transmitContext'
 import useChannel from '@/hooks/useChannel'
+import useRtpDevice from '@/hooks/useRtpDevice'
+import { handleCreateTransport } from '@/lib/transport'
+import type { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters'
 
-export default function ChannelPage({ channel }: { channel: ChannelExtended }) {
+interface ChannelPageProps {
+  channel: ChannelExtended
+  routerRtpCapabilities: {
+    rtpCapabilities: RtpCapabilities
+  }
+}
+
+export default function ChannelPage({
+  channel,
+  routerRtpCapabilities: { rtpCapabilities },
+}: ChannelPageProps) {
   return (
     <TransmitContextProvider>
       <ChannelContextProvider channel={channel}>
@@ -37,10 +51,39 @@ export default function ChannelPage({ channel }: { channel: ChannelExtended }) {
               <WhosTyping />
               <CreateMessageForm />
             </div>
+            <RtpDeviceContextProvider routerRtpCapabilities={rtpCapabilities}>
+              <VideoList />
+            </RtpDeviceContextProvider>
           </div>
         </MessagesContextProvider>
       </ChannelContextProvider>
     </TransmitContextProvider>
+  )
+}
+
+function VideoList() {
+  const { channel } = useChannel()
+  const { device } = useRtpDevice()
+
+  return (
+    <ul
+      css={{
+        height: '100%',
+        width: '350px',
+        fontSize: '.85em',
+        padding: '.85em',
+        display: 'block',
+        overflow: 'auto',
+        border: '1px solid #dadce0',
+      }}
+    >
+      <li>
+        <button onClick={() => handleCreateTransport(channel, device, 'send')}>
+          create send transport
+        </button>
+      </li>
+      list of videos
+    </ul>
   )
 }
 

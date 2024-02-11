@@ -4,7 +4,7 @@ export default function ChannelList({ channels }: { channels: Channel[] }) {
   return (
     <ul css={{ paddingLeft: '1em' }}>
       {channels.map((channel) => (
-        <ChannelItem channel={channel} />
+        <ChannelItem channel={channel} key={channel.id} />
       ))}
     </ul>
   )

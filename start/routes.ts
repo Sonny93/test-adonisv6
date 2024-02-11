@@ -27,7 +27,11 @@ router
     router.post('/channels/:channel_id/messages', [MessagesController, 'createMessage'])
     router.post('/channels/:channel_id/typing', [ChannelsController, 'typing'])
 
-    router.get('/server-capabilities', [RtpController, 'getRtpCapabilities'])
+    router.get('/router-capabilities', [RtpController, 'getRtpCapabilities'])
+    router.post('/transport/:channel_id/produce', [RtpController, 'produceMedia'])
+    router.post('/transport/:channel_id/consume', [RtpController, 'consumeMedia'])
+    router.post('/transport/:channel_id/create/:direction', [RtpController, 'createTransport'])
+    router.post('/transport/:channel_id/connect/:direction', [RtpController, 'connectTransport'])
   })
   .middleware([middleware.auth()])
 
