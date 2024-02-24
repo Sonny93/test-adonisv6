@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import RoundedImage from '../RoundedImage'
 
 export default function TypingItem({
   user,
@@ -18,5 +19,15 @@ export default function TypingItem({
       return () => clearTimeout(timeout)
     }
   }, [expiration])
-  return user.nickName
+
+  return (
+    <span>
+      <RoundedImage
+        src={user.avatarUrl}
+        size={20}
+        css={{ verticalAlign: 'sub', fontSize: '.85em' }}
+      />{' '}
+      {user.nickName}
+    </span>
+  )
 }

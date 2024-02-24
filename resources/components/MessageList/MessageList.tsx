@@ -5,10 +5,6 @@ import { css } from '@emotion/react'
 import { useEffect, useRef } from 'react'
 import MessageItem from './MessageItem'
 
-type EventData = {
-  type: 'user' | 'system'
-} & Message
-
 export default function MessageList() {
   const { messages, addMessage } = useMessages()
   const { channel } = useChannel()
@@ -39,8 +35,8 @@ export default function MessageList() {
         overflow: 'auto',
       })}
     >
-      {messages.map((message, index) => (
-        <MessageItem message={message} key={message.content + index} />
+      {messages.map((message) => (
+        <MessageItem message={message} key={message.id} />
       ))}
     </ul>
   )

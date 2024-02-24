@@ -23,7 +23,7 @@ export const cssReset = css({
 
   'a': {
     'width': 'fit-content',
-    'color': 'blue',
+    'color': '#3f88c5',
     'textDecoration': 'none',
     'borderBottom': '1px solid transparent',
 
@@ -45,7 +45,7 @@ export const htmlBodyStyle = css({
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     fontSize: '18px',
     color: '#333',
-    backgroundColor: '#fff',
+    backgroundColor: '#f0eef6',
     display: 'flex',
     flexDirection: 'column',
     transition: 'background-image 0.15s ease-in-out',

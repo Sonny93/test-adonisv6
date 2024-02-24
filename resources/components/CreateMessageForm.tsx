@@ -62,12 +62,12 @@ export default function CreateMessageForm() {
         type="text"
         onChange={handleInputChange}
         value={data.content}
-        placeholder="Your message"
+        placeholder={`Your message in #${channel.name}`}
         maxLength={5000}
         autoFocus
       />
       {errors.content && <div>{errors.content}</div>}
-      <Button type="submit" disabled={isFormDisabled}>
+      <Button css={{ display: 'none' }} type="submit" disabled={isFormDisabled}>
         send
       </Button>
     </form>
