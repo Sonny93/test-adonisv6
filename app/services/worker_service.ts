@@ -1,5 +1,4 @@
 import { MEDIA_CODECS, WORKER_OPTIONS } from '#config/mediasoup'
-import logger from '@adonisjs/core/services/logger'
 import { createWorker, observer } from 'mediasoup'
 import { Router, Worker } from 'mediasoup/node/lib/types.js'
 
@@ -16,17 +15,17 @@ class WorkerService {
       return
     }
 
+    observer.on('newworker', (worker: Worker) => {
+      console.log('Worker created')
+
+      worker.observer.on('close', () => console.log('Worker closed'))
+      worker.observer.on('newrouter', (router: Router) => console.log('Router created', router.id))
+    })
+
     this.booted = true
     this.worker = await createWorker(WORKER_OPTIONS)
     this.router = await this.worker.createRouter({
       mediaCodecs: MEDIA_CODECS,
-    })
-
-    observer.on('newworker', (worker: Worker) => {
-      logger.info('Worker created')
-
-      worker.observer.on('close', () => logger.info('Worker closed'))
-      worker.observer.on('newrouter', (router: Router) => logger.info('Router created', router.id))
     })
   }
 }

@@ -4,6 +4,7 @@ import WorkerService from '#services/worker_service'
 import { connectTransportValidator } from '#validators/transport'
 import { HttpContext } from '@adonisjs/core/http'
 import logger from '@adonisjs/core/services/logger'
+import transmit from '@adonisjs/transmit/services/main'
 import { WebRtcTransport } from 'mediasoup/node/lib/WebRtcTransport.js'
 
 export default class RtpController {
@@ -23,11 +24,18 @@ export default class RtpController {
       appData: { userId: auth.user!.id },
     })
 
+    transport.on('trace', (trace) =>
+      console.log(`${auth.user!.nickName} ice connection state: ${trace}`)
+    )
+    transport.on('@newproducer', console.log)
+    transport.on('@producerclose', console.log)
+    transport.on('dtlsstatechange', console.log)
+    transport.on('@close', console.log)
     transport.on('icestatechange', (connectionState) =>
-      logger.info(`${auth.user!.nickName} ice connection state: ${connectionState}`)
+      console.log(`${auth.user!.nickName} ice connection state: ${connectionState}`)
     )
     transport.on('dtlsstatechange', (connectionState) => {
-      logger.info(`${auth.user!.nickName} dtls connection state: ${connectionState}`)
+      console.log(`${auth.user!.nickName} dtls connection state: ${connectionState}`)
       if (connectionState === 'closed') {
         this.storeTransportService.deleteTransport(auth.user!.id, direction)
       }
@@ -54,22 +62,51 @@ export default class RtpController {
   }
 
   async produceMedia({ auth, request, response }: HttpContext) {
+    const channelId = request.param('channel_id')
     // TODO: use validator
     const { kind, rtpParameters } = request.body()
 
     const foundTransport = this.storeTransportService.findTransport(auth.user!.id, 'send')
     if (!foundTransport) {
-      logger.info(`${auth.user!.nickName} transport send not found`)
-      return response.notFound({ error: 'Transport not found' })
+      logger.info(`${auth.user!.nickName} send transport not found`)
+      return response.notFound({ error: 'Send transport not found' })
     }
 
     const producer = await foundTransport.produce({ kind, rtpParameters })
     logger.info(`${auth.user!.nickName} produce`)
 
+    transmit.broadcast(`channels/${channelId}/produce`, {
+      producerId: producer.id,
+      kind: 'video',
+      user: auth.user,
+    })
     response.ok({ producerId: producer.id })
   }
 
-  async consumeMedia({ auth, request, response }: HttpContext) {}
+  async consumeMedia({ auth, request, response }: HttpContext) {
+    const { clientRtpCapabilities, producerId } = request.body()
+    if (
+      !this.workerService.router?.canConsume({ producerId, rtpCapabilities: clientRtpCapabilities })
+    ) {
+      return response.badRequest({ error: 'Cannot consume this producer' })
+    }
+
+    const foundTransport = this.storeTransportService.findTransport(auth.user!.id, 'recv')
+    if (!foundTransport) {
+      logger.info(`${auth.user!.nickName} recv transport not found`)
+      return response.notFound({ error: 'Recv transport not found' })
+    }
+
+    const consumer = await foundTransport.consume({
+      producerId,
+      rtpCapabilities: clientRtpCapabilities,
+    })
+
+    return response.ok({
+      consumerId: consumer.id,
+      rtpParameters: consumer.rtpParameters,
+    })
+  }
 
   private extractTransportDataClient(transport: WebRtcTransport) {
     const { id, iceParameters, iceCandidates, dtlsParameters, sctpParameters } = transport

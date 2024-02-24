@@ -7,24 +7,21 @@ import {
 export const WORKER_OPTIONS = {
   logLevel: 'debug',
   logTags: ['info', 'ice', 'dtls', 'rtp', 'srtp', 'rtcp'],
-  rtcMinPort: process.env.WORKER_RTC_MIN_PORT ?? 40000,
-  rtcMaxPort: process.env.WORKER_RTC_MAX_PORT ?? 49999,
+  rtcMinPort: 40000,
+  rtcMaxPort: 49999,
 } as WorkerSettings
-
-export const HOST_IP = process.env.HOST_IP ?? '0.0.0.0'
-export const HOST_ANNOUNCED_IP = process.env.HOST_ANNOUNCED_IP ?? '127.0.0.1'
-export const HOST_PORT = Number.parseInt(process.env.HOST_PORT ?? '', 10) ?? 4000
 
 const listenIps = [
   {
-    ip: HOST_IP,
-    announcedIp: HOST_ANNOUNCED_IP,
+    ip: '0.0.0.0',
+    announcedIp: '127.0.0.1',
   },
 ]
 export const TRANSPORT_OPTIONS = {
   listenIps,
   enableTcp: true,
   enableUdp: true,
+  preferUdp: true,
   initialAvailableOutgoingBitrate: 800000,
   enableSctp: true,
 } as WebRtcTransportOptions

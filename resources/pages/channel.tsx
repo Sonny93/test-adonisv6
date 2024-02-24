@@ -1,3 +1,4 @@
+import ChannelName from '@/components/ChannelName'
 import CreateMessageForm from '@/components/CreateMessageForm'
 import MessageList from '@/components/MessageList/MessageList'
 import Navbar from '@/components/Navbar'
@@ -9,8 +10,15 @@ import { RtpDeviceContextProvider } from '@/contexts/rtpDeviceContext'
 import { TransmitContextProvider } from '@/contexts/transmitContext'
 import useChannel from '@/hooks/useChannel'
 import useRtpDevice from '@/hooks/useRtpDevice'
-import { handleCreateTransport } from '@/lib/transport'
+import useStream from '@/hooks/useStream'
+import useSubscribe from '@/hooks/useSubscribe'
+import useTransports from '@/hooks/useTransports'
+import useUser from '@/hooks/useUser'
+import { handleConsume, handleCreateConsumeTransport } from '@/lib/consume-transport'
+import { handleCreateProduceTransport } from '@/lib/produce-transport'
 import type { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters'
+import { type ConnectionState, type Producer } from 'mediasoup-client/lib/types'
+import { useRef, useState } from 'react'
 
 interface ChannelPageProps {
   channel: ChannelExtended
@@ -64,6 +72,67 @@ export default function ChannelPage({
 function VideoList() {
   const { channel } = useChannel()
   const { device } = useRtpDevice()
+  const { user } = useUser()
+  console.log('render', device)
+
+  const { transports, addTransport, removeTransport } = useTransports()
+  useSubscribe<{ producerId: Producer['id']; kind: 'video' | 'audio'; user: User }>(
+    `channels/${channel.id}/produce`,
+    (data) => {
+      if (user.id === data.user.id) return console.info('ignore current user', data)
+      console.log('new producer', data)
+      createConsumeTransport(data.producerId)
+    }
+  )
+
+  const { createStream } = useStream({ screenShare: true })
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const videoRef2 = useRef<HTMLVideoElement>(null)
+
+  const [connectionState, setConnectionState] = useState<ConnectionState>()
+
+  async function handleClick() {
+    const stream = await createStream()
+    const transport = await handleCreateProduceTransport({
+      channel,
+      device,
+      stream,
+      onStateChange: (connState) => {
+        console.log(connState)
+        setConnectionState(connState)
+      },
+    })
+
+    videoRef.current.srcObject = stream
+    videoRef.current.play()
+  }
+
+  const createConsumeTransport = async (producerId: Producer['id']) => {
+    console.log('c', device)
+    const transport = await handleCreateConsumeTransport({
+      channel,
+      device,
+      onStateChange: console.log,
+    })
+    console.log('created')
+    const data = await handleConsume(channel, {
+      clientRtpCapabilities: device.rtpCapabilities,
+      producerId: producerId,
+    })
+    console.log(data)
+    const consumer = await transport.consume({
+      id: data.consumerId,
+      producerId: producerId,
+      rtpParameters: data.rtpParameters,
+      kind: 'video',
+    })
+    console.log('Consume success', consumer)
+    const stream = new MediaStream([consumer.track])
+
+    videoRef2.current.srcObject = stream
+    videoRef2.current.play()
+    return stream
+  }
 
   return (
     <ul
@@ -78,16 +147,10 @@ function VideoList() {
       }}
     >
       <li>
-        <button onClick={() => handleCreateTransport(channel, device, 'send')}>
-          create send transport
-        </button>
+        <button onClick={handleClick}>create send transport</button>
       </li>
-      list of videos
+      <video css={{ width: '100%' }} ref={videoRef} autoPlay muted controls />
+      <video css={{ width: '100%' }} ref={videoRef2} autoPlay muted controls />
     </ul>
   )
-}
-
-function ChannelName() {
-  const { channel } = useChannel()
-  return <div>{channel.name}</div>
 }

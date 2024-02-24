@@ -29,5 +29,9 @@ export function RtpDeviceContextProvider({
     newDevice.load({ routerRtpCapabilities }).then(() => setDevice(newDevice))
   }, [])
 
-  return <RtpDeviceContext.Provider value={{ device }}>{children}</RtpDeviceContext.Provider>
+  return (
+    device?.loaded && (
+      <RtpDeviceContext.Provider value={{ device }}>{children}</RtpDeviceContext.Provider>
+    )
+  )
 }
