@@ -24,7 +24,12 @@ export function TransportsContextProvider({
 }) {
   const [transports, setTransports] = useState<Transport[]>(transportsParam)
   const handleAddTransport = (transport: Transport) =>
-    setTransports((transports) => [...transports, transport])
+    setTransports((transports) => {
+      const newTransports = [...transports]
+      newTransports.push(transport)
+      return newTransports
+    })
+
   const handleRemoveTransport = (transport: Transport) => {
     setTransports((_transports) => {
       const transportIndex = _transports.findIndex((m) => m.id === transport.id)

@@ -2,6 +2,7 @@ import ChannelName from '@/components/ChannelName'
 import CreateMessageForm from '@/components/CreateMessageForm'
 import MessageList from '@/components/MessageList/MessageList'
 import Navbar from '@/components/Navbar'
+import RoundedImage from '@/components/RoundedImage'
 import UserList from '@/components/UserList/UserList'
 import WhosTyping from '@/components/WhosTypings/WhosTypings'
 import { ChannelContextProvider } from '@/contexts/channelContext'
@@ -12,13 +13,12 @@ import useChannel from '@/hooks/useChannel'
 import useRtpDevice from '@/hooks/useRtpDevice'
 import useStream from '@/hooks/useStream'
 import useSubscribe from '@/hooks/useSubscribe'
-import useTransports from '@/hooks/useTransports'
 import useUser from '@/hooks/useUser'
 import { handleConsume, handleCreateConsumeTransport } from '@/lib/consume-transport'
 import { handleCreateProduceTransport } from '@/lib/produce-transport'
 import type { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters'
-import { type ConnectionState, type Producer } from 'mediasoup-client/lib/types'
-import { useRef, useState } from 'react'
+import { Transport, type Producer } from 'mediasoup-client/lib/types'
+import { useEffect, useRef, useState } from 'react'
 
 interface ChannelPageProps {
   channel: ChannelExtended
@@ -26,6 +26,8 @@ interface ChannelPageProps {
     rtpCapabilities: RtpCapabilities
   }
 }
+
+type MediaTransport = { stream: MediaStream; transport: Transport; user: User }
 
 export default function ChannelPage({
   channel,
@@ -73,39 +75,26 @@ function VideoList() {
   const { channel } = useChannel()
   const { device } = useRtpDevice()
   const { user } = useUser()
-  console.log('render', device)
 
-  const { transports, addTransport, removeTransport } = useTransports()
+  const [mediaTransports, setMediaTranspots] = useState<MediaTransport[]>([])
+
   useSubscribe<{ producerId: Producer['id']; kind: 'video' | 'audio'; user: User }>(
     `channels/${channel.id}/produce`,
-    (data) => {
+    async (data) => {
       if (user.id === data.user.id) return console.info('ignore current user', data)
       console.log('new producer', data)
-      createConsumeTransport(data.producerId)
+      const { stream, transport } = await createConsumeTransport(data.producerId)
+      setMediaTranspots((_s) => {
+        const copy = [..._s]
+        copy.push({
+          stream,
+          transport,
+          user: data.user,
+        })
+        return copy
+      })
     }
   )
-
-  const { createStream } = useStream({ screenShare: true })
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const videoRef2 = useRef<HTMLVideoElement>(null)
-
-  const [connectionState, setConnectionState] = useState<ConnectionState>()
-
-  async function handleClick() {
-    const stream = await createStream()
-    const transport = await handleCreateProduceTransport({
-      channel,
-      device,
-      stream,
-      onStateChange: (connState) => {
-        console.log(connState)
-        setConnectionState(connState)
-      },
-    })
-
-    videoRef.current.srcObject = stream
-    videoRef.current.play()
-  }
 
   const createConsumeTransport = async (producerId: Producer['id']) => {
     console.log('c', device)
@@ -114,31 +103,26 @@ function VideoList() {
       device,
       onStateChange: console.log,
     })
-    console.log('created')
+
     const data = await handleConsume(channel, {
       clientRtpCapabilities: device.rtpCapabilities,
       producerId: producerId,
     })
-    console.log(data)
     const consumer = await transport.consume({
       id: data.consumerId,
       producerId: producerId,
       rtpParameters: data.rtpParameters,
       kind: 'video',
     })
-    console.log('Consume success', consumer)
-    const stream = new MediaStream([consumer.track])
 
-    videoRef2.current.srcObject = stream
-    videoRef2.current.play()
-    return stream
+    return { transport, stream: new MediaStream([consumer.track]), consumer }
   }
 
   return (
     <ul
       css={{
         height: '100%',
-        width: '350px',
+        width: '1000px',
         fontSize: '.85em',
         padding: '.85em',
         display: 'block',
@@ -147,10 +131,92 @@ function VideoList() {
       }}
     >
       <li>
-        <button onClick={handleClick}>create send transport</button>
+        <ButtonProduceVideo />
       </li>
-      <video css={{ width: '100%' }} ref={videoRef} autoPlay muted controls />
-      <video css={{ width: '100%' }} ref={videoRef2} autoPlay muted controls />
+      {mediaTransports.map((mediaTransport) => (
+        <li key={mediaTransport.stream.id}>
+          <MediaTransportVideo {...mediaTransport} />
+        </li>
+      ))}
     </ul>
+  )
+}
+
+function ButtonProduceVideo() {
+  const { createStream } = useStream({ screenShare: true })
+  const { channel } = useChannel()
+  const { device } = useRtpDevice()
+  const { user } = useUser()
+
+  const [mediaTransport, setMediaTransport] = useState<MediaTransport>(null)
+
+  async function handleClick() {
+    const stream = await createStream()
+    const transport = await handleCreateProduceTransport({
+      channel,
+      device,
+      stream,
+    })
+
+    setMediaTransport({ stream, transport, user })
+  }
+  return (
+    <>
+      <button onClick={handleClick}>Screen share</button>
+      {mediaTransport && <MediaTransportVideo {...mediaTransport} key={mediaTransport.stream.id} />}
+    </>
+  )
+}
+
+function MediaTransportVideo({ stream, transport, user }: MediaTransport) {
+  const { user: currentUser } = useUser()
+
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [connectionState, setConnectionState] = useState<Transport['connectionState']>(
+    transport.connectionState
+  )
+
+  const [videoLoading, setVideoLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    videoRef.current.srcObject = stream
+    videoRef.current.play()
+    transport.on('connectionstatechange', setConnectionState)
+  }, [])
+
+  return (
+    <>
+      <div css={{ position: 'relative', borderRadius: '5px', overflow: 'hidden' }}>
+        <video
+          css={{ width: '100%' }}
+          ref={videoRef}
+          onCanPlayThrough={() => setVideoLoading(false)}
+        />
+        {videoLoading && (
+          <div
+            css={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              height: '100%',
+              width: '100%',
+              color: '#fff',
+              fontSize: '24px',
+              backgroundColor: 'rgba(0, 0, 0, .5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            Loading
+          </div>
+        )}
+      </div>
+      <p>Conn. state: {connectionState}</p>
+      <p css={{ display: 'flex', gap: '.35em', alignItems: 'center' }}>
+        <RoundedImage src={user.avatarUrl} size={24} /> {user.name}{' '}
+        {currentUser.id === user.id && '(you)'}
+      </p>
+    </>
   )
 }

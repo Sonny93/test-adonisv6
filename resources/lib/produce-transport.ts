@@ -11,12 +11,12 @@ export async function handleCreateProduceTransport({
   channel: Channel
   device: Device
   stream: MediaStream
-  onStateChange: (connState: ConnectionState) => void
+  onStateChange?: (connState: ConnectionState) => void
 }) {
   const routerTransport = await createTransport(channel.id, 'send')
   const transport = device.createSendTransport(routerTransport)
 
-  transport.on('connectionstatechange', onStateChange)
+  onStateChange && transport.on('connectionstatechange', onStateChange)
   transport.once('connect', (...args) => handleConnect(channel, 'send', ...args))
   transport.on('produce', (...args) => handleProduce(channel, device, ...args))
 
