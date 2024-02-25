@@ -21,9 +21,6 @@ export default class Channel extends AppBaseModel {
   @belongsTo(() => User, { foreignKey: 'authorId' })
   declare author: BelongsTo<typeof User>
 
-  @manyToMany(() => User)
-  declare users: ManyToMany<typeof User>
-
   @manyToMany(() => Message)
   declare messages: ManyToMany<typeof Message>
 

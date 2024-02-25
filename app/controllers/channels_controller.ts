@@ -37,10 +37,7 @@ export default class ChannelsController {
       throw new Error(`Channel with id "${channelId}" does not exist`)
     }
     await channel.load((loader) => {
-      loader
-        .load('messages', (messageLoader) => messageLoader.preload('author'))
-        .load('author')
-        .load('users')
+      loader.load('messages', (messageLoader) => messageLoader.preload('author')).load('author')
     })
     return channel
   }

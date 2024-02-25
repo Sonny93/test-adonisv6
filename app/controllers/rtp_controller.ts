@@ -114,9 +114,6 @@ export default class RtpController {
     direction: TransportDirection
   ): void {
     transport.on('trace', (trace) => console.log(`${user!.nickName} trace: ${trace}`))
-    // transport.on('@newproducer', console.log)
-    transport.on('@producerclose', console.log)
-    transport.on('@close', (...args) => console.log('@close', args))
     transport.on('icestatechange', (connectionState) =>
       console.log(`${user!.nickName} ice connection state: ${connectionState}`)
     )
