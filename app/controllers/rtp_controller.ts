@@ -1,4 +1,5 @@
 import { TRANSPORT_OPTIONS } from '#config/mediasoup'
+import User from '#models/user'
 import StoreTransportService from '#services/store_transport_service'
 import WorkerService from '#services/worker_service'
 import { connectTransportValidator } from '#validators/transport'
@@ -24,22 +25,7 @@ export default class RtpController {
       appData: { userId: auth.user!.id },
     })
 
-    transport.on('trace', (trace) =>
-      console.log(`${auth.user!.nickName} ice connection state: ${trace}`)
-    )
-    transport.on('@newproducer', console.log)
-    transport.on('@producerclose', console.log)
-    transport.on('dtlsstatechange', console.log)
-    transport.on('@close', console.log)
-    transport.on('icestatechange', (connectionState) =>
-      console.log(`${auth.user!.nickName} ice connection state: ${connectionState}`)
-    )
-    transport.on('dtlsstatechange', (connectionState) => {
-      console.log(`${auth.user!.nickName} dtls connection state: ${connectionState}`)
-      if (connectionState === 'closed') {
-        this.storeTransportService.deleteTransport(auth.user!.id, direction)
-      }
-    })
+    this.handleDebugTransportEvents(transport, auth.user!, direction)
 
     this.storeTransportService.storeTransport(auth.user!.id, direction, transport)
     return response.send(this.extractTransportDataClient(transport))
@@ -74,6 +60,15 @@ export default class RtpController {
 
     const producer = await foundTransport.produce({ kind, rtpParameters })
     logger.info(`${auth.user!.nickName} produce`)
+
+    producer.on('transportclose', () => {
+      console.log('transport closed')
+      transmit.broadcast(`channels/${channelId}/produce/stop`, {
+        producerId: producer.id,
+        kind: 'video',
+        user: auth.user,
+      })
+    })
 
     transmit.broadcast(`channels/${channelId}/produce`, {
       producerId: producer.id,
@@ -111,5 +106,27 @@ export default class RtpController {
   private extractTransportDataClient(transport: WebRtcTransport) {
     const { id, iceParameters, iceCandidates, dtlsParameters, sctpParameters } = transport
     return { id, iceParameters, iceCandidates, dtlsParameters, sctpParameters }
+  }
+
+  private handleDebugTransportEvents(
+    transport: WebRtcTransport,
+    user: User,
+    direction: TransportDirection
+  ): void {
+    transport.on('trace', (trace) => console.log(`${user!.nickName} trace: ${trace}`))
+    // transport.on('@newproducer', console.log)
+    transport.on('@producerclose', console.log)
+    transport.on('@close', (...args) => console.log('@close', args))
+    transport.on('icestatechange', (connectionState) =>
+      console.log(`${user!.nickName} ice connection state: ${connectionState}`)
+    )
+    transport.on('dtlsstatechange', (connectionState) => {
+      console.log(`${user!.nickName} dtls connection state: ${connectionState}`)
+      if (connectionState === 'closed') {
+        console.log(`${user!.nickName} delete transport`)
+        transport.close()
+        this.storeTransportService.deleteTransport(user!.id, direction)
+      }
+    })
   }
 }

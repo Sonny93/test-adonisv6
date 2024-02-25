@@ -6,16 +6,22 @@ import RoundedImage from '@/components/RoundedImage'
 import UserList from '@/components/UserList/UserList'
 import WhosTyping from '@/components/WhosTypings/WhosTypings'
 import { ChannelContextProvider } from '@/contexts/channelContext'
+import {
+  MediaTransportsContextProvider,
+  type MediaTransportsContextType,
+} from '@/contexts/mediaTransportsContext'
 import { MessagesContextProvider } from '@/contexts/messagesContext'
 import { RtpDeviceContextProvider } from '@/contexts/rtpDeviceContext'
 import { TransmitContextProvider } from '@/contexts/transmitContext'
 import useChannel from '@/hooks/useChannel'
+import useMediaTransports from '@/hooks/useMediaTransports'
 import useRtpDevice from '@/hooks/useRtpDevice'
 import useStream from '@/hooks/useStream'
 import useSubscribe from '@/hooks/useSubscribe'
 import useUser from '@/hooks/useUser'
 import { handleConsume, handleCreateConsumeTransport } from '@/lib/consume-transport'
 import { handleCreateProduceTransport } from '@/lib/produce-transport'
+import type { MediaTransport, NewMediaTransport } from '@/types/transport'
 import type { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters'
 import { Transport, type Producer } from 'mediasoup-client/lib/types'
 import { useEffect, useRef, useState } from 'react'
@@ -26,8 +32,6 @@ interface ChannelPageProps {
     rtpCapabilities: RtpCapabilities
   }
 }
-
-type MediaTransport = { stream: MediaStream; transport: Transport; user: User }
 
 export default function ChannelPage({
   channel,
@@ -62,7 +66,9 @@ export default function ChannelPage({
               <CreateMessageForm />
             </div>
             <RtpDeviceContextProvider routerRtpCapabilities={rtpCapabilities}>
-              <VideoList />
+              <MediaTransportsContextProvider mediaTransports={[]}>
+                <VideoList />
+              </MediaTransportsContextProvider>
             </RtpDeviceContextProvider>
           </div>
         </MessagesContextProvider>
@@ -76,25 +82,26 @@ function VideoList() {
   const { device } = useRtpDevice()
   const { user } = useUser()
 
-  const [mediaTransports, setMediaTranspots] = useState<MediaTransport[]>([])
+  const { mediaTransports, addMediaTransport, removeMediaTransport } = useMediaTransports()
 
-  useSubscribe<{ producerId: Producer['id']; kind: 'video' | 'audio'; user: User }>(
-    `channels/${channel.id}/produce`,
-    async (data) => {
-      if (user.id === data.user.id) return console.info('ignore current user', data)
-      console.log('new producer', data)
-      const { stream, transport } = await createConsumeTransport(data.producerId)
-      setMediaTranspots((_s) => {
-        const copy = [..._s]
-        copy.push({
-          stream,
-          transport,
-          user: data.user,
-        })
-        return copy
-      })
-    }
-  )
+  useSubscribe<NewMediaTransport>(`channels/${channel.id}/produce`, async (data) => {
+    if (user.id === data.user.id) return console.info('ignore current user', data)
+    console.log('new producer', data)
+    const { stream, transport } = await createConsumeTransport(data.producerId)
+    addMediaTransport({
+      stream,
+      transport,
+      kind: data.kind,
+      user: data.user,
+      producerId: data.producerId,
+    })
+  })
+
+  useSubscribe<NewMediaTransport>(`channels/${channel.id}/produce/stop`, async (data) => {
+    if (user.id === data.user.id) return console.info('ignore current user', data)
+    console.log('remove producer', data)
+    removeMediaTransport(data)
+  })
 
   const createConsumeTransport = async (producerId: Producer['id']) => {
     console.log('c', device)
@@ -135,7 +142,7 @@ function VideoList() {
       </li>
       {mediaTransports.map((mediaTransport) => (
         <li key={mediaTransport.stream.id}>
-          <MediaTransportVideo {...mediaTransport} />
+          <MediaTransportVideo {...mediaTransport} removeMediaTransport={removeMediaTransport} />
         </li>
       ))}
     </ul>
@@ -158,17 +165,35 @@ function ButtonProduceVideo() {
       stream,
     })
 
-    setMediaTransport({ stream, transport, user })
+    setMediaTransport({ stream, transport, user, kind: 'video' })
   }
+
+  function handleClose() {
+    mediaTransport?.transport?.close()
+    mediaTransport?.stream?.getTracks().forEach((track) => track.stop())
+    setMediaTransport(null)
+  }
+
   return (
     <>
-      <button onClick={handleClick}>Screen share</button>
+      {!mediaTransport ? (
+        <button onClick={handleClick}>Screen share</button>
+      ) : (
+        <button onClick={handleClose}>Stop screen share</button>
+      )}
       {mediaTransport && <MediaTransportVideo {...mediaTransport} key={mediaTransport.stream.id} />}
     </>
   )
 }
 
-function MediaTransportVideo({ stream, transport, user }: MediaTransport) {
+function MediaTransportVideo({
+  stream,
+  transport,
+  user,
+  kind,
+  producerId,
+  removeMediaTransport,
+}: MediaTransport & { removeMediaTransport?: MediaTransportsContextType['removeMediaTransport'] }) {
   const { user: currentUser } = useUser()
 
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -181,7 +206,17 @@ function MediaTransportVideo({ stream, transport, user }: MediaTransport) {
   useEffect(() => {
     videoRef.current.srcObject = stream
     videoRef.current.play()
-    transport.on('connectionstatechange', setConnectionState)
+    transport.on('connectionstatechange', (connState: Transport['connectionState']) => {
+      setConnectionState(connState)
+      if (connState !== 'new' && connState !== 'connecting' && connState !== 'connected') {
+        removeMediaTransport &&
+          removeMediaTransport({
+            kind,
+            user,
+            producerId,
+          })
+      }
+    })
   }, [])
 
   return (
