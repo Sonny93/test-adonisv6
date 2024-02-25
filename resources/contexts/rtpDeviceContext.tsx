@@ -25,7 +25,6 @@ export function RtpDeviceContextProvider({
     if (device) return
     const newDevice = new Device()
 
-    console.log(routerRtpCapabilities)
     newDevice.load({ routerRtpCapabilities }).then(() => setDevice(newDevice))
   }, [])
 

@@ -62,7 +62,6 @@ export default class RtpController {
     logger.info(`${auth.user!.nickName} produce`)
 
     producer.on('transportclose', () => {
-      console.log('transport closed')
       transmit.broadcast(`channels/${channelId}/produce/stop`, {
         producerId: producer.id,
         kind: 'video',
