@@ -1,9 +1,24 @@
 import type { MediaTransportsContextType } from '@/contexts/mediaTransportsContext'
 import useUser from '@/hooks/useUser'
 import type { MediaTransport } from '@/types/transport'
+import styled from '@emotion/styled'
 import type { Transport } from 'mediasoup-client/lib/Transport'
 import { useEffect, useRef, useState } from 'react'
 import RoundedImage from '../RoundedImage'
+
+const OverlayElement = styled.div({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  height: '100%',
+  width: '100%',
+  color: '#fff',
+  fontSize: '24px',
+  backgroundColor: 'rgba(0, 0, 0, .5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+})
 
 export default function MediaTransportVideo({
   stream,
@@ -21,10 +36,14 @@ export default function MediaTransportVideo({
   )
 
   const [videoLoading, setVideoLoading] = useState<boolean>(true)
+  const [canAutoPlay, setCanAutoPlay] = useState<boolean>(true)
+
+  const playVideo = () => videoRef.current.play().catch(() => setCanAutoPlay(false))
 
   useEffect(() => {
     videoRef.current.srcObject = stream
-    videoRef.current.play()
+    playVideo()
+
     transport.on('connectionstatechange', (connState: Transport['connectionState']) => {
       setConnectionState(connState)
       if (connState !== 'new' && connState !== 'connecting' && connState !== 'connected') {
@@ -46,24 +65,18 @@ export default function MediaTransportVideo({
           ref={videoRef}
           onCanPlayThrough={() => setVideoLoading(false)}
         />
-        {videoLoading && (
-          <div
-            css={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              height: '100%',
-              width: '100%',
-              color: '#fff',
-              fontSize: '24px',
-              backgroundColor: 'rgba(0, 0, 0, .5)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            Loading
-          </div>
+        {videoLoading && <OverlayElement>Loading</OverlayElement>}
+        {!videoLoading && !canAutoPlay && (
+          <OverlayElement>
+            <button
+              onClick={() => {
+                setCanAutoPlay(true)
+                playVideo()
+              }}
+            >
+              Click to play video
+            </button>
+          </OverlayElement>
         )}
       </div>
       <p>Conn. state: {connectionState}</p>

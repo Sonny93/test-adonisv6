@@ -10,6 +10,7 @@ import { MediaTransportsContextProvider } from '@/contexts/mediaTransportsContex
 import { MessagesContextProvider } from '@/contexts/messagesContext'
 import { RtpDeviceContextProvider } from '@/contexts/rtpDeviceContext'
 import { TransmitContextProvider } from '@/contexts/transmitContext'
+import type { NewMediaTransport } from '@/types/transport'
 import type { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters'
 
 interface ChannelPageProps {
@@ -17,11 +18,13 @@ interface ChannelPageProps {
   routerRtpCapabilities: {
     rtpCapabilities: RtpCapabilities
   }
+  producers: NewMediaTransport[]
 }
 
 export default function ChannelPage({
   channel,
   routerRtpCapabilities: { rtpCapabilities },
+  producers,
 }: ChannelPageProps) {
   return (
     <TransmitContextProvider>
@@ -53,7 +56,7 @@ export default function ChannelPage({
             </div>
             <RtpDeviceContextProvider routerRtpCapabilities={rtpCapabilities}>
               <MediaTransportsContextProvider mediaTransports={[]}>
-                <VideoList />
+                <VideoList producers={producers} />
               </MediaTransportsContextProvider>
             </RtpDeviceContextProvider>
           </div>

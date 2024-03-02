@@ -8,6 +8,8 @@ import logger from '@adonisjs/core/services/logger'
 import transmit from '@adonisjs/transmit/services/main'
 import { WebRtcTransport } from 'mediasoup/node/lib/WebRtcTransport.js'
 
+const producers: ProducerMedia[] = []
+
 export default class RtpController {
   constructor(
     protected workerService = WorkerService,
@@ -17,6 +19,8 @@ export default class RtpController {
   getRtpCapabilities = () => ({
     rtpCapabilities: this.workerService.router?.rtpCapabilities,
   })
+
+  getProducers = () => producers
 
   async createTransport({ auth, request, response }: HttpContext) {
     const direction = request.param('direction')
@@ -62,18 +66,22 @@ export default class RtpController {
     logger.info(`${auth.user!.nickName} produce`)
 
     producer.on('transportclose', () => {
+      const producerMediaIndex = producers.findIndex(({ producerId }) => producerId === producer.id)
       transmit.broadcast(`channels/${channelId}/produce/stop`, {
         producerId: producer.id,
         kind: 'video',
         user: auth.user,
       })
+      producers.splice(producerMediaIndex, 1)
     })
 
-    transmit.broadcast(`channels/${channelId}/produce`, {
+    const producerMedia = {
       producerId: producer.id,
       kind: 'video',
       user: auth.user,
-    })
+    } as ProducerMedia
+    producers.push(producerMedia)
+    transmit.broadcast(`channels/${channelId}/produce`, producerMedia)
     response.ok({ producerId: producer.id })
   }
 

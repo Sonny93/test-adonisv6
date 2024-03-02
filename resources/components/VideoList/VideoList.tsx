@@ -1,22 +1,23 @@
-import { handleConsume, handleCreateConsumeTransport } from '@/lib/consume-transport'
-import ButtonProduceVideo from './ButtonProduceVideo'
-import MediaTransportVideo from './MediaTransportVideo'
-import type { Producer } from 'mediasoup-client/lib/Producer'
-import type { NewMediaTransport } from '@/types/transport'
-import useSubscribe from '@/hooks/useSubscribe'
-import useUser from '@/hooks/useUser'
-import useRtpDevice from '@/hooks/useRtpDevice'
 import useChannel from '@/hooks/useChannel'
 import useMediaTransports from '@/hooks/useMediaTransports'
+import useRtpDevice from '@/hooks/useRtpDevice'
+import useSubscribe from '@/hooks/useSubscribe'
+import useUser from '@/hooks/useUser'
+import { handleConsume, handleCreateConsumeTransport } from '@/lib/consume-transport'
+import type { NewMediaTransport } from '@/types/transport'
+import type { Producer } from 'mediasoup-client/lib/Producer'
+import { useEffect } from 'react'
+import ButtonProduceVideo from './ButtonProduceVideo'
+import MediaTransportVideo from './MediaTransportVideo'
 
-export default function VideoList() {
+export default function VideoList({ producers }: { producers: NewMediaTransport[] }) {
   const { channel } = useChannel()
   const { device } = useRtpDevice()
   const { user } = useUser()
 
   const { mediaTransports, addMediaTransport, removeMediaTransport } = useMediaTransports()
 
-  useSubscribe<NewMediaTransport>(`channels/${channel.id}/produce`, async (data) => {
+  const handleOui = async (data: NewMediaTransport) => {
     if (user.id === data.user.id) return console.info('ignore current user', data)
     const { stream, transport } = await createConsumeTransport(data.producerId)
     addMediaTransport({
@@ -26,7 +27,12 @@ export default function VideoList() {
       user: data.user,
       producerId: data.producerId,
     })
-  })
+  }
+  useEffect(() => {
+    producers.forEach(handleOui)
+  }, [])
+
+  useSubscribe<NewMediaTransport>(`channels/${channel.id}/produce`, handleOui)
 
   useSubscribe<NewMediaTransport>(`channels/${channel.id}/produce/stop`, async (data) => {
     if (user.id === data.user.id) return console.info('ignore current user', data)

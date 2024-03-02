@@ -25,9 +25,12 @@ export default class ChannelsController {
   async renderFromChannelId({ request, inertia }: HttpContext) {
     const channel = await this.getChannelById(request.param('channel_id'))
     const routerRtpCapabilities = this.rtpController.getRtpCapabilities()
+    const producers = this.rtpController.getProducers()
+
     return inertia.render('channel', {
       channel,
       routerRtpCapabilities,
+      producers,
     })
   }
 
