@@ -47,6 +47,6 @@ export default class ChannelsController {
 
   async typing({ request, auth }: HttpContext) {
     const channelId = request.param('channel_id')
-    transmit.broadcast(`channels/${channelId}/typing`, { user: auth.user! })
+    transmit.broadcast(`channels/${channelId}/typing`, { user: auth.user!.serialize()! })
   }
 }

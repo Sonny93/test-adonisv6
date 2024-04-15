@@ -1,7 +1,6 @@
 {
   "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
-    "jsx": "react",
     "rootDir": "./",
     "outDir": "./build",
     "target": "ES6",
@@ -28,5 +27,5 @@
     }
   },
   "include": ["./**/*"],
-  "exclude": ["./resources/**/*"]
+  "exclude": ["node_modules", "./resources/**/*", "inertia/**/*"]
 }

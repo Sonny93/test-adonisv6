@@ -36,3 +36,5 @@ router
   .middleware([middleware.auth()])
 
 router.get('*', async ({ inertia }) => inertia.render('error_404'))
+router.on('/inertia').renderInertia('home', { version: 6 })
+

@@ -1,0 +1,24 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.client.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["DOM", "ESNext", "DOM.Iterable", "ES2020"],
+    "jsxImportSource": "@emotion/react",
+    "useDefineForClassFields": true,
+    "strict": false,
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@/*": ["./*"],
+      "~/*": ["../*"]
+    },
+    "resolveJsonModule": true,
+    "types": ["vite/client"],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  },
+  "include": ["./**/*.ts", "./**/*.tsx"]
+}

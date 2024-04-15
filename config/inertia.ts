@@ -1,14 +1,11 @@
 import { defineConfig } from '@adonisjs/inertia'
 
 export default defineConfig({
-  /**
-   * Path to the Edge view that will be used as the root view for Inertia responses
-   */
   rootView: 'root',
-
-  /**
-   * Data that should be shared with all rendered pages
-   */
+  ssr: {
+    enabled: true,
+    entrypoint: 'inertia/app/ssr.tsx',
+  },
   sharedData: {
     errors: (ctx) => ctx.session.flashMessages.get('errors'),
     flash: (ctx) => ctx.session.flashMessages.get('flash'),

@@ -70,7 +70,7 @@ export default class RtpController {
       transmit.broadcast(`channels/${channelId}/produce/stop`, {
         producerId: producer.id,
         kind: 'video',
-        user: auth.user,
+        user: auth.user!.serialize(),
       })
       producers.splice(producerMediaIndex, 1)
     })
