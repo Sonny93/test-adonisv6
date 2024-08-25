@@ -1,12 +1,12 @@
-import useChannel from '~/hooks/useChannel';
 import { useForm } from '@inertiajs/react';
-import { useCallback, useMemo, type ChangeEvent } from 'react';
-import Button from './Form/Button.js';
-import TextField from './Form/TextField.js';
+import { FormEvent, useMemo, type ChangeEvent } from 'react';
+import useChannel from '~/hooks/useChannel';
+import { makeRequest } from '~/lib/request.js';
+import { Button, FormControl, FormErrorMessage, Input } from '@chakra-ui/react';
 
 export default function CreateMessageForm() {
   const { channel } = useChannel();
-  const { data, setData, reset, processing, errors } = useForm({
+  const { data, setData, reset, processing, errors, hasErrors } = useForm({
     content: '',
   });
   const isFormDisabled = useMemo(
@@ -14,67 +14,46 @@ export default function CreateMessageForm() {
     [processing, data]
   );
 
-  const makeRequest = async ({
-    url,
-    headers,
-    body,
-    method = 'GET',
-  }: Omit<RequestInit, 'body'> & { url: string; body?: any }) => {
-    return await fetch(url, {
-      method,
-      headers: {
-        ...headers,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    makeRequest({
+      method: 'post',
+      url: `/channels/${channel.id}/messages`,
+      body: data,
+    }).then(() => reset());
+    reset();
   };
 
-  const handleSubmit = useCallback(
-    async (event) => {
-      event.preventDefault();
-      await makeRequest({
-        method: 'post',
-        url: `/channels/${channel.id}/messages`,
-        body: data,
-      });
-      reset();
-    },
-    [data]
-  );
-
-  const handleInputChange = async ({
-    target,
-  }: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setData('content', target.value);
-    await makeRequest({
+    makeRequest({
       method: 'post',
       url: `/channels/${channel.id}/typing`,
     });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      css={{
-        display: 'flex',
-        gap: '.35em',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <TextField
-        type="text"
-        onChange={handleInputChange}
-        value={data.content}
-        placeholder={`Your message in #${channel.name}`}
-        maxLength={5000}
-        autoFocus
-      />
-      {errors.content && <div>{errors.content}</div>}
-      <Button css={{ display: 'none' }} type="submit" disabled={isFormDisabled}>
-        send
-      </Button>
+    <form onSubmit={handleSubmit}>
+      <FormControl isInvalid={hasErrors}>
+        <Input
+          type="text"
+          onChange={handleInputChange}
+          value={data.content}
+          placeholder={`Your message in #${channel.name}`}
+          maxLength={5000}
+          autoFocus
+        />
+        {hasErrors && errors?.content && (
+          <FormErrorMessage>{errors.content}</FormErrorMessage>
+        )}
+        <Button
+          css={{ display: 'none' }}
+          type="submit"
+          disabled={isFormDisabled}
+        >
+          send
+        </Button>
+      </FormControl>
     </form>
   );
 }

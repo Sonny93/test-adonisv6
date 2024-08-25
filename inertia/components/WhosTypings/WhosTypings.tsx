@@ -15,7 +15,7 @@ export default function WhosTyping() {
   const { user: currentUser } = useUser();
 
   useSubscribe<{ user: User }>(`channels/${channel.id}/typing`, ({ user }) => {
-    if (currentUser.id === user.id) return;
+    if (currentUser?.id === user.id) return;
     setTypings((_typings) => {
       const newTypings = [..._typings];
       const userIndex = newTypings.findIndex(({ user: u }) => u.id === user.id);
@@ -33,7 +33,7 @@ export default function WhosTyping() {
       return newTypings;
     });
   });
-  useNewMessageEvent(channel.id, ({ author }) => removeTypingUser(author));
+  useNewMessageEvent(channel.id, ({ author }) => removeTypingUser(author!));
 
   function removeTypingUser(user: User) {
     setTypings((_typings) => {
@@ -55,7 +55,6 @@ export default function WhosTyping() {
         marginTop: '.35em',
         padding: '0.3em 0.5em',
         boxSizing: 'content-box',
-        borderTop: '1px solid #dadce0',
       }}
     >
       {typings.map(({ user, expiration }, index) => (

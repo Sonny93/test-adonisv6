@@ -13,7 +13,9 @@ export default function ButtonProduceVideo() {
   const { device } = useRtpDevice();
   const { user } = useUser();
 
-  const [mediaTransport, setMediaTransport] = useState<MediaTransport>(null);
+  const [mediaTransport, setMediaTransport] = useState<MediaTransport | null>(
+    null
+  );
 
   async function handleClick() {
     const stream = await createStream();
@@ -23,7 +25,7 @@ export default function ButtonProduceVideo() {
       stream,
     });
 
-    setMediaTransport({ stream, transport, user, kind: 'video' });
+    setMediaTransport({ stream, transport, user: user!, kind: 'video' });
   }
 
   function handleClose() {

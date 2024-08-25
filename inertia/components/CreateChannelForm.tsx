@@ -1,41 +1,50 @@
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+} from '@chakra-ui/react';
 import { useForm } from '@inertiajs/react';
-import { useMemo } from 'react';
-import Button from './Form/Button.js';
-import TextField from './Form/TextField.js';
+import { ChangeEvent, FormEvent } from 'react';
 
 export default function CreateChannelForm() {
-  const { data, setData, post, processing, errors } = useForm({
+  const { data, setData, post, processing, errors, hasErrors } = useForm({
     name: '',
   });
-  const isFormDisabled = useMemo(
-    () => processing || data.name.length === 0,
-    [processing, data]
-  );
 
-  function submit(e) {
+  const handleChannelInput = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setData('name', target.value);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     post('/channels');
-  }
+  };
 
   return (
-    <form
-      onSubmit={submit}
-      css={{
-        display: 'flex',
-        gap: '.35em',
-        flexDirection: 'column',
-      }}
-    >
-      <TextField
-        type="text"
-        value={data.name}
-        onChange={(e) => setData('name', e.target.value)}
-        placeholder="New channel"
-      />
-      {errors.name && <div>{errors.name}</div>}
-      <Button type="submit" disabled={isFormDisabled}>
-        Create
-      </Button>
+    <form onSubmit={handleSubmit}>
+      <FormControl isInvalid={hasErrors}>
+        <FormLabel>Channel name</FormLabel>
+        <Input
+          type="text"
+          value={data.name}
+          onChange={handleChannelInput}
+          placeholder="Channel name"
+        />
+        {hasErrors && errors?.name && (
+          <FormErrorMessage>{errors.name}</FormErrorMessage>
+        )}
+        <Button
+          mt={4}
+          colorScheme="blue"
+          type="submit"
+          disabled={data.name.length === 0}
+          isLoading={processing}
+        >
+          Create
+        </Button>
+      </FormControl>
     </form>
   );
 }

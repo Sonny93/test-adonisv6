@@ -1,8 +1,7 @@
+import { useEffect, useRef } from 'react';
 import useChannel from '~/hooks/useChannel';
 import useMessages from '~/hooks/useMessages';
 import useNewMessageEvent from '~/hooks/useNewMessageEvent';
-import { css } from '@emotion/react';
-import { useEffect, useRef } from 'react';
 import MessageItem from './MessageItem.js';
 
 export default function MessageList() {
@@ -25,7 +24,7 @@ export default function MessageList() {
   return (
     <ul
       ref={ref}
-      css={css({
+      css={{
         width: '100%',
         padding: '.5em',
         display: 'flex',
@@ -33,7 +32,7 @@ export default function MessageList() {
         gap: '.75em',
         flexDirection: 'column',
         overflow: 'auto',
-      })}
+      }}
     >
       {messages.map((message) => (
         <MessageItem message={message} key={message.id} />

@@ -1,3 +1,11 @@
+import {
+  Container,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from '@chakra-ui/react';
 import type { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters';
 import ChannelName from '~/components/ChannelName';
 import CreateMessageForm from '~/components/CreateMessageForm';
@@ -21,47 +29,70 @@ interface ChannelPageProps {
   producers: NewMediaTransport[];
 }
 
-export default function ChannelPage({
+const ChannelPage = ({
   channel,
   routerRtpCapabilities: { rtpCapabilities },
   producers,
-}: ChannelPageProps) {
-  return (
-    <TransmitContextProvider>
-      <ChannelContextProvider channel={channel}>
-        <MessagesContextProvider messages={channel.messages}>
-          <Navbar />
-          <div
-            css={{
-              height: 'calc(100% - 24px - 1.5em)', // 24px = height of navbar; 1.5em navbar padding
-              padding: '1em',
-              paddingTop: '0',
-              display: 'flex',
-              flex: '1',
-              gap: '.5em',
-            }}
-          >
-            <UserList />
-            <div
-              css={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <ChannelName />
-              <MessageList />
-              <WhosTyping />
-              <CreateMessageForm />
-            </div>
-            <RtpDeviceContextProvider routerRtpCapabilities={rtpCapabilities}>
-              <MediaTransportsContextProvider mediaTransports={[]}>
-                <VideoList producers={producers} />
-              </MediaTransportsContextProvider>
-            </RtpDeviceContextProvider>
-          </div>
-        </MessagesContextProvider>
-      </ChannelContextProvider>
-    </TransmitContextProvider>
-  );
-}
+}: ChannelPageProps) => (
+  <TransmitContextProvider>
+    <ChannelContextProvider channel={channel}>
+      <MessagesContextProvider messages={channel.messages}>
+        <RtpDeviceContextProvider routerRtpCapabilities={rtpCapabilities}>
+          <MediaTransportsContextProvider mediaTransports={[]}>
+            <Container h="calc(100vh)" minWidth="100%">
+              <Navbar />
+              <div
+                css={{
+                  height: 'calc(100% - 24px - 1.5em)', // 24px = height of navbar; 1.5em navbar padding
+                  padding: '1em',
+                  paddingTop: '0',
+                  display: 'flex',
+                  flex: '1',
+                  gap: '.5em',
+                }}
+              >
+                <UserList />
+                <Tabs
+                  css={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  {
+                    <TabList>
+                      <Tab>Messages</Tab>
+                      <Tab>Call</Tab>
+                    </TabList>
+                  }
+
+                  <TabPanels css={{ flex: 1 }}>
+                    <TabPanel
+                      padding={0}
+                      pt={4}
+                      css={{
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                      }}
+                    >
+                      <ChannelName />
+                      <MessageList />
+                      <WhosTyping />
+                      <CreateMessageForm />
+                    </TabPanel>
+                    <TabPanel>
+                      <VideoList producers={producers} />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </div>
+            </Container>
+          </MediaTransportsContextProvider>
+        </RtpDeviceContextProvider>
+      </MessagesContextProvider>
+    </ChannelContextProvider>
+  </TransmitContextProvider>
+);
+
+export default ChannelPage;

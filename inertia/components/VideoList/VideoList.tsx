@@ -1,3 +1,6 @@
+import type { Producer } from 'mediasoup-client/lib/Producer';
+import { useEffect } from 'react';
+import ButtonProduceVideo from '~/components/VideoList/ButtonProduceVideo.js';
 import useChannel from '~/hooks/useChannel';
 import useMediaTransports from '~/hooks/useMediaTransports';
 import useRtpDevice from '~/hooks/useRtpDevice';
@@ -8,9 +11,6 @@ import {
   handleCreateConsumeTransport,
 } from '~/lib/consume-transport.js';
 import type { NewMediaTransport } from '~/types/transport';
-import type { Producer } from 'mediasoup-client/lib/Producer';
-import { useEffect } from 'react';
-import ButtonProduceVideo from './ButtonProduceVideo.js';
 import MediaTransportVideo from './MediaTransportVideo.js';
 
 export default function VideoList({
@@ -26,7 +26,7 @@ export default function VideoList({
     useMediaTransports();
 
   const handleOui = async (data: NewMediaTransport) => {
-    if (user.id === data.user.id)
+    if (user?.id === data.user.id)
       return console.info('ignore current user', data);
     const { stream, transport } = await createConsumeTransport(data.producerId);
     addMediaTransport({
@@ -46,7 +46,7 @@ export default function VideoList({
   useSubscribe<NewMediaTransport>(
     `channels/${channel.id}/produce/stop`,
     async (data) => {
-      if (user.id === data.user.id)
+      if (user?.id === data.user.id)
         return console.info('ignore current user', data);
       removeMediaTransport(data);
     }
