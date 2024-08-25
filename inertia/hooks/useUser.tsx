@@ -1,4 +1,4 @@
-import type { InertiaPage } from '@/types/inertia';
+import type { InertiaPage } from '~/types/inertia';
 import { usePage } from '@inertiajs/react';
 
 export default function useUser() {

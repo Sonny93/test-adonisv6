@@ -1,6 +1,7 @@
-import ChannelList from '@/components/ChannelList/ChannelList';
-import CreateChannelForm from '@/components/CreateChannelForm';
-import Navbar from '@/components/Navbar';
+import { Heading } from '@chakra-ui/react';
+import ChannelList from '~/components/ChannelList/ChannelList';
+import CreateChannelForm from '~/components/CreateChannelForm';
+import Navbar from '~/components/Navbar';
 
 export default function Home({ channels }: { channels: Channel[] }) {
   return (
@@ -17,7 +18,7 @@ export default function Home({ channels }: { channels: Channel[] }) {
             flexDirection: 'column',
           }}
         >
-          <h1>List of channels</h1>
+          <Heading>List of channels</Heading>
           <CreateChannelForm />
           <ChannelList channels={channels} />
         </div>

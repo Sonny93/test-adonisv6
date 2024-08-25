@@ -1,13 +1,13 @@
-import useChannel from '@/hooks/useChannel';
-import useMediaTransports from '@/hooks/useMediaTransports';
-import useRtpDevice from '@/hooks/useRtpDevice';
-import useSubscribe from '@/hooks/useSubscribe';
-import useUser from '@/hooks/useUser';
+import useChannel from '~/hooks/useChannel';
+import useMediaTransports from '~/hooks/useMediaTransports';
+import useRtpDevice from '~/hooks/useRtpDevice';
+import useSubscribe from '~/hooks/useSubscribe';
+import useUser from '~/hooks/useUser';
 import {
   handleConsume,
   handleCreateConsumeTransport,
-} from '@/lib/consume-transport.js';
-import type { NewMediaTransport } from '@/types/transport';
+} from '~/lib/consume-transport.js';
+import type { NewMediaTransport } from '~/types/transport';
 import type { Producer } from 'mediasoup-client/lib/Producer';
 import { useEffect } from 'react';
 import ButtonProduceVideo from './ButtonProduceVideo.js';

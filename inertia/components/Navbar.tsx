@@ -1,4 +1,4 @@
-import type { InertiaPage } from '@/types/inertia';
+import type { InertiaPage } from '~/types/inertia';
 import { Link, usePage } from '@inertiajs/react';
 import RoundedImage from './RoundedImage.js';
 

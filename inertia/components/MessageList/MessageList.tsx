@@ -1,6 +1,6 @@
-import useChannel from '@/hooks/useChannel';
-import useMessages from '@/hooks/useMessages';
-import useNewMessageEvent from '@/hooks/useNewMessageEvent';
+import useChannel from '~/hooks/useChannel';
+import useMessages from '~/hooks/useMessages';
+import useNewMessageEvent from '~/hooks/useNewMessageEvent';
 import { css } from '@emotion/react';
 import { useEffect, useRef } from 'react';
 import MessageItem from './MessageItem.js';

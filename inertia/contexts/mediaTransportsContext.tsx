@@ -1,4 +1,4 @@
-import type { MediaTransport, NewMediaTransport } from '@/types/transport';
+import type { MediaTransport, NewMediaTransport } from '~/types/transport';
 import { createContext, useState, type ReactNode } from 'react';
 
 export type MediaTransportsContextType = {

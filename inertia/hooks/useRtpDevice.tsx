@@ -1,4 +1,4 @@
-import { RtpDeviceContext } from '@/contexts/rtpDeviceContext';
+import { RtpDeviceContext } from '~/contexts/rtpDeviceContext';
 import { useContext } from 'react';
 
 export default function useRtpDevice() {

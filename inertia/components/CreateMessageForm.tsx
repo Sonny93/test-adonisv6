@@ -1,4 +1,4 @@
-import useChannel from '@/hooks/useChannel';
+import useChannel from '~/hooks/useChannel';
 import { useForm } from '@inertiajs/react';
 import { useCallback, useMemo, type ChangeEvent } from 'react';
 import Button from './Form/Button.js';

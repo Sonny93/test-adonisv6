@@ -1,4 +1,4 @@
-import useChannel from '@/hooks/useChannel';
+import useChannel from '~/hooks/useChannel';
 import { HiHashtag } from 'react-icons/hi2';
 
 export default function ChannelName() {

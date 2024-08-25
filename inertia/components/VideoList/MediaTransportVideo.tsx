@@ -1,6 +1,6 @@
-import type { MediaTransportsContextType } from '@/contexts/mediaTransportsContext';
-import useUser from '@/hooks/useUser';
-import type { MediaTransport } from '@/types/transport';
+import type { MediaTransportsContextType } from '~/contexts/mediaTransportsContext';
+import useUser from '~/hooks/useUser';
+import type { MediaTransport } from '~/types/transport';
 import styled from '@emotion/styled';
 import type { Transport } from 'mediasoup-client/lib/Transport';
 import { useEffect, useRef, useState } from 'react';

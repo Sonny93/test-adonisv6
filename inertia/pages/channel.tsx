@@ -1,18 +1,17 @@
-import ChannelName from '@/components/ChannelName';
-import CreateMessageForm from '@/components/CreateMessageForm';
-import MessageList from '@/components/MessageList/MessageList';
-import Navbar from '@/components/Navbar';
-import UserList from '@/components/UserList/UserList';
-import VideoList from '@/components/VideoList/VideoList';
-import WhosTyping from '@/components/WhosTypings/WhosTypings';
-import { ChannelContextProvider } from '@/contexts/channelContext';
-import { MediaTransportsContextProvider } from '@/contexts/mediaTransportsContext';
-import { MessagesContextProvider } from '@/contexts/messagesContext';
-import { RtpDeviceContextProvider } from '@/contexts/rtpDeviceContext';
-import { TransmitContextProvider } from '@/contexts/transmitContext';
-import type { NewMediaTransport } from '@/types/transport';
 import type { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters';
-import { ChakraProvider } from '@chakra-ui/react';
+import ChannelName from '~/components/ChannelName';
+import CreateMessageForm from '~/components/CreateMessageForm';
+import MessageList from '~/components/MessageList/MessageList';
+import Navbar from '~/components/Navbar';
+import UserList from '~/components/UserList/UserList';
+import VideoList from '~/components/VideoList/VideoList';
+import WhosTyping from '~/components/WhosTypings/WhosTypings';
+import { ChannelContextProvider } from '~/contexts/channelContext';
+import { MediaTransportsContextProvider } from '~/contexts/mediaTransportsContext';
+import { MessagesContextProvider } from '~/contexts/messagesContext';
+import { RtpDeviceContextProvider } from '~/contexts/rtpDeviceContext';
+import { TransmitContextProvider } from '~/contexts/transmitContext';
+import type { NewMediaTransport } from '~/types/transport';
 
 interface ChannelPageProps {
   channel: ChannelExtended;

@@ -1,7 +1,7 @@
-import useChannel from '@/hooks/useChannel';
-import useNewMessageEvent from '@/hooks/useNewMessageEvent';
-import useSubscribe from '@/hooks/useSubscribe';
-import useUser from '@/hooks/useUser';
+import useChannel from '~/hooks/useChannel';
+import useNewMessageEvent from '~/hooks/useNewMessageEvent';
+import useSubscribe from '~/hooks/useSubscribe';
+import useUser from '~/hooks/useUser';
 import { Fragment, useState } from 'react';
 import TypingItem from './TypingItem.js';
 

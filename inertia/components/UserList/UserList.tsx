@@ -1,4 +1,4 @@
-import useSubscribe from '@/hooks/useSubscribe';
+import useSubscribe from '~/hooks/useSubscribe';
 import { useState } from 'react';
 import UserItem from './UserItem.js';
 
