@@ -1,9 +1,9 @@
-import type { MediaTransportsContextType } from '~/contexts/mediaTransportsContext';
-import useUser from '~/hooks/useUser';
-import type { MediaTransport } from '~/types/transport';
 import styled from '@emotion/styled';
 import type { Transport } from 'mediasoup-client/lib/Transport';
 import { useEffect, useRef, useState } from 'react';
+import type { MediaTransportsContextType } from '~/contexts/mediaTransportsContext';
+import useUser from '~/hooks/useUser';
+import type { MediaTransport } from '~/types/transport';
 import RoundedImage from '../RoundedImage.js';
 
 const OverlayElement = styled.div({
@@ -41,10 +41,10 @@ export default function MediaTransportVideo({
   const [canAutoPlay, setCanAutoPlay] = useState<boolean>(true);
 
   const playVideo = () =>
-    videoRef.current.play().catch(() => setCanAutoPlay(false));
+    videoRef.current!.play().catch(() => setCanAutoPlay(false));
 
   useEffect(() => {
-    videoRef.current.srcObject = stream;
+    videoRef.current!.srcObject = stream;
     playVideo();
 
     transport.on(
@@ -60,7 +60,7 @@ export default function MediaTransportVideo({
             removeMediaTransport({
               kind,
               user,
-              producerId,
+              producerId: producerId!,
             });
         }
       }
@@ -70,7 +70,12 @@ export default function MediaTransportVideo({
   return (
     <>
       <div
-        css={{ position: 'relative', borderRadius: '5px', overflow: 'hidden' }}
+        css={{
+          position: 'relative',
+          width: '100%',
+          borderRadius: '5px',
+          overflow: 'hidden',
+        }}
       >
         <video
           css={{ width: '100%' }}

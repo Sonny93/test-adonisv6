@@ -1,4 +1,4 @@
-type Message = {
+export type Message = {
   id: string;
   author?: User;
   type: 'system' | 'user';
@@ -7,7 +7,7 @@ type Message = {
   updatedAt: string;
 };
 
-type User = {
+export type User = {
   id: string;
   name: string;
   nickName: string;
@@ -16,7 +16,7 @@ type User = {
   updatedAt: string;
 };
 
-type Channel = {
+export type Channel = {
   id: string;
   name: string;
   author: User;
@@ -24,7 +24,7 @@ type Channel = {
   updatedAt: string;
 };
 
-type ChannelExtended = Channel & {
+export type ChannelExtended = Channel & {
   author: User;
   users: User[];
   messages: Message[];

@@ -76,19 +76,20 @@ export default function VideoList({
     <ul
       css={{
         height: '100%',
-        width: '1000px',
+        width: '100%',
         fontSize: '.85em',
         padding: '.85em',
-        display: 'block',
+        display: 'flex',
+        justifyContent: 'space-between',
         overflow: 'auto',
         border: '1px solid #dadce0',
       }}
     >
-      <li>
+      <li css={{ width: '30%' }}>
         <ButtonProduceVideo />
       </li>
       {mediaTransports.map((mediaTransport) => (
-        <li key={mediaTransport.stream.id}>
+        <li key={mediaTransport.stream.id} css={{ width: '30%' }}>
           <MediaTransportVideo
             {...mediaTransport}
             removeMediaTransport={removeMediaTransport}

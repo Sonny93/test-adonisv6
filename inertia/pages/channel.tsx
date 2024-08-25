@@ -19,6 +19,7 @@ import { MediaTransportsContextProvider } from '~/contexts/mediaTransportsContex
 import { MessagesContextProvider } from '~/contexts/messagesContext';
 import { RtpDeviceContextProvider } from '~/contexts/rtpDeviceContext';
 import { TransmitContextProvider } from '~/contexts/transmitContext';
+import { ChannelExtended, User } from '~/types';
 import type { NewMediaTransport } from '~/types/transport';
 
 interface ChannelPageProps {
@@ -27,12 +28,14 @@ interface ChannelPageProps {
     rtpCapabilities: RtpCapabilities;
   };
   producers: NewMediaTransport[];
+  users: User[];
 }
 
 const ChannelPage = ({
   channel,
   routerRtpCapabilities: { rtpCapabilities },
   producers,
+  users,
 }: ChannelPageProps) => (
   <TransmitContextProvider>
     <ChannelContextProvider channel={channel}>
@@ -51,7 +54,7 @@ const ChannelPage = ({
                   gap: '.5em',
                 }}
               >
-                <UserList />
+                <UserList users={users} />
                 <Tabs
                   css={{
                     width: '100%',

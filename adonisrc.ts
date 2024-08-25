@@ -1,4 +1,4 @@
-import { defineConfig } from '@adonisjs/core/app';
+import { defineConfig } from '@adonisjs/core/app'
 
 export default defineConfig({
   assetsBundler: false,
@@ -24,10 +24,10 @@ export default defineConfig({
     () => import('@adonisjs/static/static_provider'),
     () => import('@adonisjs/lucid/database_provider'),
     () => import('@adonisjs/auth/auth_provider'),
-    () => import('@adonisjs/transmit/transmit_provider'),
     () => import('@adonisjs/inertia/inertia_provider'),
     () => import('@adonisjs/ally/ally_provider'),
     () => import('#providers/mediasoup_provider'),
+    () => import('@adonisjs/transmit/transmit_provider')
   ],
   preloads: [
     () => import('#start/routes'),
@@ -59,4 +59,4 @@ export default defineConfig({
       reloadServer: false,
     },
   ],
-});
+})
