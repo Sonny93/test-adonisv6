@@ -1,2 +1,2 @@
-import WorkerService from '#services/worker_service'
-WorkerService.boot()
+import WorkerService from '#services/worker_service';
+WorkerService.boot();

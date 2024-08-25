@@ -1,17 +1,25 @@
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import RoundedImage from '../RoundedImage.js'
-dayjs.extend(relativeTime)
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import RoundedImage from '../RoundedImage.js';
+dayjs.extend(relativeTime);
 
-export default function MessageItem({ message }: Readonly<{ message: Message }>) {
-  const { author: user, type, content } = message
+export default function MessageItem({
+  message,
+}: Readonly<{ message: Message }>) {
+  const { author: user, type, content } = message;
   if (type === 'system') {
-    return <li css={{ fontSize: '.9em', color: '#888' }}>system - {content}</li>
+    return (
+      <li css={{ fontSize: '.9em', color: '#888' }}>system - {content}</li>
+    );
   }
 
   return (
     <li css={{ display: 'flex', gap: '.5em' }}>
-      <RoundedImage src={user.avatarUrl} alt={`${user.nickName}'s avatar`} size={24} />
+      <RoundedImage
+        src={user.avatarUrl}
+        alt={`${user.nickName}'s avatar`}
+        size={24}
+      />
       <div
         css={{
           display: 'flex',
@@ -26,18 +34,18 @@ export default function MessageItem({ message }: Readonly<{ message: Message }>)
         <span css={{ wordBreak: 'break-word' }}>{content}</span>
       </div>
     </li>
-  )
+  );
 }
 
 function MessageDate({ message }: { message: Message }) {
-  const { createdAt, updatedAt } = message
+  const { createdAt, updatedAt } = message;
   if (createdAt === updatedAt) {
-    return <>{dayjs(createdAt).fromNow()}</>
+    return <>{dayjs(createdAt).fromNow()}</>;
   }
 
   return (
     <>
       {dayjs(createdAt).fromNow()} (edited {`${dayjs(updatedAt).fromNow()}`})
     </>
-  )
+  );
 }

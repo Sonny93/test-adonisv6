@@ -1,0 +1,56 @@
+name: prod-stack
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready']
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - '${DB_PORT}:5432'
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:8.6
+    restart: always
+    healthcheck:
+      test: ['CMD', 'wget', '-O', '-', 'http://localhost:80/misc/ping']
+      interval: 2s
+      timeout: 10s
+      retries: 30
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=myemail@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=a12345678
+    depends_on:
+      - postgres
+    volumes:
+      - ./servers_pgadmin.json:/pgadmin4/servers.json
+    ports:
+      - '5050:80'
+
+  test-adonis-v6:
+    container_name: test-adonis-v6
+    restart: always
+    build:
+      context: .
+    environment:
+      - DB_HOST=postgres
+      - HOST=0.0.0.0
+      - NODE_ENV=production
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - ${PORT}:3333
+
+volumes:
+  postgres-volume:
+    name: postgres-prod-test-adonis-v6

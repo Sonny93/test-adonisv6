@@ -1,11 +1,14 @@
-import { defineConfig } from '@adonisjs/core/app'
+import { defineConfig } from '@adonisjs/core/app';
 
 export default defineConfig({
   assetsBundler: false,
   unstable_assembler: {
     onBuildStarting: [() => import('@adonisjs/vite/build_hook')],
   },
-  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands')],
+  commands: [
+    () => import('@adonisjs/core/commands'),
+    () => import('@adonisjs/lucid/commands'),
+  ],
   providers: [
     () => import('@adonisjs/core/providers/app_provider'),
     () => import('@adonisjs/core/providers/hash_provider'),
@@ -56,4 +59,4 @@ export default defineConfig({
       reloadServer: false,
     },
   ],
-})
+});

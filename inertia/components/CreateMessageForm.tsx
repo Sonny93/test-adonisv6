@@ -1,15 +1,18 @@
-import useChannel from '@/hooks/useChannel'
-import { useForm } from '@inertiajs/react'
-import { useCallback, useMemo, type ChangeEvent } from 'react'
-import Button from './Form/Button.js'
-import TextField from './Form/TextField.js'
+import useChannel from '@/hooks/useChannel';
+import { useForm } from '@inertiajs/react';
+import { useCallback, useMemo, type ChangeEvent } from 'react';
+import Button from './Form/Button.js';
+import TextField from './Form/TextField.js';
 
 export default function CreateMessageForm() {
-  const { channel } = useChannel()
+  const { channel } = useChannel();
   const { data, setData, reset, processing, errors } = useForm({
     content: '',
-  })
-  const isFormDisabled = useMemo(() => processing || data.content.length === 0, [processing, data])
+  });
+  const isFormDisabled = useMemo(
+    () => processing || data.content.length === 0,
+    [processing, data]
+  );
 
   const makeRequest = async ({
     url,
@@ -24,29 +27,31 @@ export default function CreateMessageForm() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    })
-  }
+    });
+  };
 
   const handleSubmit = useCallback(
     async (event) => {
-      event.preventDefault()
+      event.preventDefault();
       await makeRequest({
         method: 'post',
         url: `/channels/${channel.id}/messages`,
         body: data,
-      })
-      reset()
+      });
+      reset();
     },
     [data]
-  )
+  );
 
-  const handleInputChange = async ({ target }: ChangeEvent<HTMLInputElement>) => {
-    setData('content', target.value)
+  const handleInputChange = async ({
+    target,
+  }: ChangeEvent<HTMLInputElement>) => {
+    setData('content', target.value);
     await makeRequest({
       method: 'post',
       url: `/channels/${channel.id}/typing`,
-    })
-  }
+    });
+  };
 
   return (
     <form
@@ -71,5 +76,5 @@ export default function CreateMessageForm() {
         send
       </Button>
     </form>
-  )
+  );
 }

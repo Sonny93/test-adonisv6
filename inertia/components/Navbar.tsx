@@ -1,9 +1,9 @@
-import type { InertiaPage } from '@/types/inertia'
-import { Link, usePage } from '@inertiajs/react'
-import RoundedImage from './RoundedImage.js'
+import type { InertiaPage } from '@/types/inertia';
+import { Link, usePage } from '@inertiajs/react';
+import RoundedImage from './RoundedImage.js';
 
 export default function Navbar() {
-  const { auth } = usePage<InertiaPage>().props
+  const { auth } = usePage<InertiaPage>().props;
   return (
     <nav
       css={{
@@ -28,7 +28,9 @@ export default function Navbar() {
         {auth.isAuthenticated && (
           <li>
             <Link href="/">
-              {auth.user?.avatarUrl && <RoundedImage src={auth.user?.avatarUrl} />}{' '}
+              {auth.user?.avatarUrl && (
+                <RoundedImage src={auth.user?.avatarUrl} />
+              )}{' '}
               {auth.user!.nickName}
             </Link>
           </li>
@@ -36,5 +38,5 @@ export default function Navbar() {
         <li></li>
       </ul>
     </nav>
-  )
+  );
 }

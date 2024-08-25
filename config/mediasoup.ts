@@ -2,21 +2,21 @@ import {
   RtpCodecCapability,
   WebRtcTransportOptions,
   WorkerSettings,
-} from 'mediasoup/node/lib/types.js'
+} from 'mediasoup/node/lib/types.js';
 
 export const WORKER_OPTIONS = {
   logLevel: 'debug',
   logTags: ['info', 'ice', 'dtls', 'rtp', 'srtp', 'rtcp'],
   rtcMinPort: 40000,
   rtcMaxPort: 49999,
-} as WorkerSettings
+} as WorkerSettings;
 
 const listenIps = [
   {
     ip: '0.0.0.0',
     announcedIp: '127.0.0.1',
   },
-]
+];
 export const TRANSPORT_OPTIONS = {
   listenIps,
   enableTcp: true,
@@ -24,7 +24,7 @@ export const TRANSPORT_OPTIONS = {
   preferUdp: true,
   initialAvailableOutgoingBitrate: 800000,
   enableSctp: true,
-} as WebRtcTransportOptions
+} as WebRtcTransportOptions;
 
 export const MEDIA_CODECS: RtpCodecCapability[] = [
   {
@@ -59,4 +59,4 @@ export const MEDIA_CODECS: RtpCodecCapability[] = [
       'level-asymmetry-allowed': 1,
     },
   },
-]
+];

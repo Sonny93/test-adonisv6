@@ -36,7 +36,6 @@
   "devDependencies": {
     "@adonisjs/assembler": "^7.5.0",
     "@adonisjs/eslint-config": "^1.3.0",
-    "@adonisjs/prettier-config": "^1.3.0",
     "@adonisjs/tsconfig": "^1.3.0",
     "@japa/assert": "^3.0.0",
     "@japa/plugin-adonisjs": "^3.0.1",
@@ -66,13 +65,15 @@
     "@adonisjs/transmit": "^0.7.0",
     "@adonisjs/transmit-client": "^0.2.1",
     "@adonisjs/vite": "^3.0.0-11",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@inertiajs/react": "^1.0.15",
     "@types/uuid": "^9.0.8",
     "@vinejs/vine": "^2.0.0",
     "dayjs": "^1.11.10",
     "edge.js": "^6.0.2",
+    "framer-motion": "^11.3.30",
     "luxon": "^3.4.4",
     "mediasoup": "^3.14.1",
     "mediasoup-client": "^3.7.6",
@@ -94,5 +95,14 @@
       "@adonisjs/prefer-lazy-listener-import": "error"
     }
   },
-  "prettier": "@adonisjs/prettier-config"
+  "prettier": {
+    "trailingComma": "es5",
+    "semi": true,
+    "singleQuote": true,
+    "useTabs": false,
+    "quoteProps": "as-needed",
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "printWidth": 80
+  }
 }

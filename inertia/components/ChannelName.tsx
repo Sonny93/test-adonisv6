@@ -1,8 +1,8 @@
-import useChannel from '@/hooks/useChannel'
-import { HiHashtag } from 'react-icons/hi2'
+import useChannel from '@/hooks/useChannel';
+import { HiHashtag } from 'react-icons/hi2';
 
 export default function ChannelName() {
-  const { channel } = useChannel()
+  const { channel } = useChannel();
   return (
     <div
       css={{
@@ -15,5 +15,5 @@ export default function ChannelName() {
     >
       <HiHashtag size={24} /> {channel.name}
     </div>
-  )
+  );
 }

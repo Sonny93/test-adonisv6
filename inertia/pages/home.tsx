@@ -1,10 +1,12 @@
-import ChannelList from '@/components/ChannelList/ChannelList'
-import CreateChannelForm from '@/components/CreateChannelForm'
-import Navbar from '@/components/Navbar'
+import ChannelList from '@/components/ChannelList/ChannelList';
+import CreateChannelForm from '@/components/CreateChannelForm';
+import Navbar from '@/components/Navbar';
 
 export default function Home({ channels }: { channels: Channel[] }) {
   return (
-    <div css={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+    <div
+      css={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}
+    >
       <div css={{ width: '600px' }}>
         <Navbar />
         <div
@@ -21,5 +23,5 @@ export default function Home({ channels }: { channels: Channel[] }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

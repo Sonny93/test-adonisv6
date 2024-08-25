@@ -1,10 +1,13 @@
-import type { DtlsParameters } from 'mediasoup-client/lib/types'
+import type { DtlsParameters } from 'mediasoup-client/lib/types';
 
-export async function createTransport(channelId: Channel['id'], direction: TransportDirection) {
+export async function createTransport(
+  channelId: Channel['id'],
+  direction: TransportDirection
+) {
   const request = await fetch(`/transport/${channelId}/create/${direction}`, {
     method: 'POST',
-  })
-  return (await request.json()) as TransportCreateResponse
+  });
+  return (await request.json()) as TransportCreateResponse;
 }
 
 export async function connectTransport(
@@ -20,7 +23,7 @@ export async function connectTransport(
     body: JSON.stringify({
       dtlsParameters,
     }),
-  })
+  });
 }
 
 export function handleConnect(
@@ -30,5 +33,7 @@ export function handleConnect(
   callback,
   errback
 ) {
-  connectTransport(channel.id, direction, dtlsParameters).then(callback).catch(errback)
+  connectTransport(channel.id, direction, dtlsParameters)
+    .then(callback)
+    .catch(errback);
 }

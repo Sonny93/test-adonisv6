@@ -1,0 +1,10 @@
+{
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": true,
+  "explorer.fileNesting.patterns": {
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, rollup.config.mjs, tsconfig.json, node_modules, vite.config.ts",
+    "Makefile": "*compose.yml, docker-config, servers_pgadmin.json, Dockerfile"
+  }
+}

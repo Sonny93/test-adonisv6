@@ -1,6 +1,6 @@
-import { MessagesContext } from '@/contexts/messagesContext'
-import { useContext } from 'react'
+import { MessagesContext } from '@/contexts/messagesContext';
+import { useContext } from 'react';
 
 export default function useMessages() {
-  return useContext(MessagesContext)
+  return useContext(MessagesContext);
 }

@@ -1,10 +1,10 @@
-import type { MediaTransportsContextType } from '@/contexts/mediaTransportsContext'
-import useUser from '@/hooks/useUser'
-import type { MediaTransport } from '@/types/transport'
-import styled from '@emotion/styled'
-import type { Transport } from 'mediasoup-client/lib/Transport'
-import { useEffect, useRef, useState } from 'react'
-import RoundedImage from '../RoundedImage.js'
+import type { MediaTransportsContextType } from '@/contexts/mediaTransportsContext';
+import useUser from '@/hooks/useUser';
+import type { MediaTransport } from '@/types/transport';
+import styled from '@emotion/styled';
+import type { Transport } from 'mediasoup-client/lib/Transport';
+import { useEffect, useRef, useState } from 'react';
+import RoundedImage from '../RoundedImage.js';
 
 const OverlayElement = styled.div({
   position: 'absolute',
@@ -18,7 +18,7 @@ const OverlayElement = styled.div({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-})
+});
 
 export default function MediaTransportVideo({
   stream,
@@ -27,39 +27,51 @@ export default function MediaTransportVideo({
   kind,
   producerId,
   removeMediaTransport,
-}: MediaTransport & { removeMediaTransport?: MediaTransportsContextType['removeMediaTransport'] }) {
-  const { user: currentUser } = useUser()
+}: MediaTransport & {
+  removeMediaTransport?: MediaTransportsContextType['removeMediaTransport'];
+}) {
+  const { user: currentUser } = useUser();
 
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [connectionState, setConnectionState] = useState<Transport['connectionState']>(
-    transport.connectionState
-  )
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [connectionState, setConnectionState] = useState<
+    Transport['connectionState']
+  >(transport.connectionState);
 
-  const [videoLoading, setVideoLoading] = useState<boolean>(true)
-  const [canAutoPlay, setCanAutoPlay] = useState<boolean>(true)
+  const [videoLoading, setVideoLoading] = useState<boolean>(true);
+  const [canAutoPlay, setCanAutoPlay] = useState<boolean>(true);
 
-  const playVideo = () => videoRef.current.play().catch(() => setCanAutoPlay(false))
+  const playVideo = () =>
+    videoRef.current.play().catch(() => setCanAutoPlay(false));
 
   useEffect(() => {
-    videoRef.current.srcObject = stream
-    playVideo()
+    videoRef.current.srcObject = stream;
+    playVideo();
 
-    transport.on('connectionstatechange', (connState: Transport['connectionState']) => {
-      setConnectionState(connState)
-      if (connState !== 'new' && connState !== 'connecting' && connState !== 'connected') {
-        removeMediaTransport &&
-          removeMediaTransport({
-            kind,
-            user,
-            producerId,
-          })
+    transport.on(
+      'connectionstatechange',
+      (connState: Transport['connectionState']) => {
+        setConnectionState(connState);
+        if (
+          connState !== 'new' &&
+          connState !== 'connecting' &&
+          connState !== 'connected'
+        ) {
+          removeMediaTransport &&
+            removeMediaTransport({
+              kind,
+              user,
+              producerId,
+            });
+        }
       }
-    })
-  }, [])
+    );
+  }, []);
 
   return (
     <>
-      <div css={{ position: 'relative', borderRadius: '5px', overflow: 'hidden' }}>
+      <div
+        css={{ position: 'relative', borderRadius: '5px', overflow: 'hidden' }}
+      >
         <video
           css={{ width: '100%' }}
           ref={videoRef}
@@ -70,8 +82,8 @@ export default function MediaTransportVideo({
           <OverlayElement>
             <button
               onClick={() => {
-                setCanAutoPlay(true)
-                playVideo()
+                setCanAutoPlay(true);
+                playVideo();
               }}
             >
               Click to play video
@@ -85,5 +97,5 @@ export default function MediaTransportVideo({
         {currentUser.id === user.id && '(you)'}
       </p>
     </>
-  )
+  );
 }

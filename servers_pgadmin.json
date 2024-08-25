@@ -1,13 +1,13 @@
 {
   "Servers": {
     "1": {
-      "Name": "project",
-      "Group": "Server Group 1",
+      "Name": "test-adonis-v6",
+      "Group": "Servers",
       "Port": 5432,
       "Username": "postgres",
       "Host": "postgres",
       "SSLMode": "prefer",
-      "MaintenanceDB": "testadonis"
+      "MaintenanceDB": "test-adonis-v6"
     }
   }
 }

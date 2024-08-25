@@ -1,17 +1,20 @@
-import { useForm } from '@inertiajs/react'
-import { useMemo } from 'react'
-import Button from './Form/Button.js'
-import TextField from './Form/TextField.js'
+import { useForm } from '@inertiajs/react';
+import { useMemo } from 'react';
+import Button from './Form/Button.js';
+import TextField from './Form/TextField.js';
 
 export default function CreateChannelForm() {
   const { data, setData, post, processing, errors } = useForm({
     name: '',
-  })
-  const isFormDisabled = useMemo(() => processing || data.name.length === 0, [processing, data])
+  });
+  const isFormDisabled = useMemo(
+    () => processing || data.name.length === 0,
+    [processing, data]
+  );
 
   function submit(e) {
-    e.preventDefault()
-    post('/channels')
+    e.preventDefault();
+    post('/channels');
   }
 
   return (
@@ -34,5 +37,5 @@ export default function CreateChannelForm() {
         Create
       </Button>
     </form>
-  )
+  );
 }

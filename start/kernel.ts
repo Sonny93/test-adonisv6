@@ -8,14 +8,14 @@
 |
 */
 
-import router from '@adonisjs/core/services/router'
-import server from '@adonisjs/core/services/server'
+import router from '@adonisjs/core/services/router';
+import server from '@adonisjs/core/services/server';
 
 /**
  * The error handler is used to convert an exception
  * to a HTTP response.
  */
-server.errorHandler(() => import('#exceptions/handler'))
+server.errorHandler(() => import('#exceptions/handler'));
 
 /**
  * The server middleware stack runs middleware on all the HTTP
@@ -27,8 +27,8 @@ server.use([
   () => import('@adonisjs/static/static_middleware'),
   () => import('#middleware/log_request'),
   () => import('@adonisjs/vite/vite_middleware'),
-  () => import('@adonisjs/inertia/inertia_middleware')
-])
+  () => import('@adonisjs/inertia/inertia_middleware'),
+]);
 
 /**
  * The router middleware stack runs middleware on all the HTTP
@@ -40,7 +40,7 @@ router.use([
   () => import('@adonisjs/shield/shield_middleware'),
   () => import('@adonisjs/auth/initialize_auth_middleware'),
   () => import('@adonisjs/inertia/inertia_middleware'),
-])
+]);
 
 /**
  * Named middleware collection must be explicitly assigned to
@@ -49,4 +49,4 @@ router.use([
 export const middleware = router.named({
   guest: () => import('#middleware/guest_middleware'),
   auth: () => import('#middleware/auth_middleware'),
-})
+});

@@ -1,5 +1,5 @@
-import env from '#start/env'
-import { defineConfig, services } from '@adonisjs/ally'
+import env from '#start/env';
+import { defineConfig, services } from '@adonisjs/ally';
 
 const allyConfig = defineConfig({
   discord: services.discord({
@@ -9,9 +9,9 @@ const allyConfig = defineConfig({
     prompt: 'consent',
     disableGuildSelect: false,
   }),
-})
+});
 
-export default allyConfig
+export default allyConfig;
 
 declare module '@adonisjs/ally/types' {
   interface SocialProviders extends InferSocialProviders<typeof allyConfig> {}

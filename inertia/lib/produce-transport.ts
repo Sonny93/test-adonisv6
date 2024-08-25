@@ -1,6 +1,6 @@
-import type { Device } from 'mediasoup-client'
-import type { ConnectionState } from 'mediasoup-client/lib/types'
-import { createTransport, handleConnect } from './transport.js'
+import type { Device } from 'mediasoup-client';
+import type { ConnectionState } from 'mediasoup-client/lib/types';
+import { createTransport, handleConnect } from './transport.js';
 
 export async function handleCreateProduceTransport({
   channel,
@@ -8,22 +8,24 @@ export async function handleCreateProduceTransport({
   stream,
   onStateChange,
 }: {
-  channel: Channel
-  device: Device
-  stream: MediaStream
-  onStateChange?: (connState: ConnectionState) => void
+  channel: Channel;
+  device: Device;
+  stream: MediaStream;
+  onStateChange?: (connState: ConnectionState) => void;
 }) {
-  const routerTransport = await createTransport(channel.id, 'send')
-  const transport = device.createSendTransport(routerTransport)
+  const routerTransport = await createTransport(channel.id, 'send');
+  const transport = device.createSendTransport(routerTransport);
 
-  onStateChange && transport.on('connectionstatechange', onStateChange)
-  transport.once('connect', (...args) => handleConnect(channel, 'send', ...args))
-  transport.on('produce', (...args) => handleProduce(channel, device, ...args))
+  onStateChange && transport.on('connectionstatechange', onStateChange);
+  transport.once('connect', (...args) =>
+    handleConnect(channel, 'send', ...args)
+  );
+  transport.on('produce', (...args) => handleProduce(channel, device, ...args));
 
-  const videoTrack = stream.getTracks()[0]
-  transport.produce({ track: videoTrack })
+  const videoTrack = stream.getTracks()[0];
+  transport.produce({ track: videoTrack });
 
-  return transport
+  return transport;
 }
 
 function handleProduce(
@@ -45,5 +47,5 @@ function handleProduce(
     }),
   })
     .then((produceId) => callback({ id: produceId }))
-    .catch(errback)
+    .catch(errback);
 }

@@ -1,25 +1,25 @@
-import useSubscribe from '@/hooks/useSubscribe'
-import { useState } from 'react'
-import UserItem from './UserItem.js'
+import useSubscribe from '@/hooks/useSubscribe';
+import { useState } from 'react';
+import UserItem from './UserItem.js';
 
 type EventData = {
-  uid: string
-}
+  uid: string;
+};
 
 export default function UserList() {
-  const [users, setUsers] = useState<string[]>([])
+  const [users, setUsers] = useState<string[]>([]);
   useSubscribe<EventData>('user_connected', ({ uid }) => {
-    setUsers((users) => [...users, uid])
-  })
+    setUsers((users) => [...users, uid]);
+  });
   useSubscribe<EventData>('user_disconnected', ({ uid }) => {
     setUsers((users) => {
-      const userIndex = users.indexOf(uid)
+      const userIndex = users.indexOf(uid);
       if (userIndex !== -1) {
-        users.splice(userIndex, 1)
+        users.splice(userIndex, 1);
       }
-      return users
-    })
-  })
+      return users;
+    });
+  });
 
   return (
     <ul
@@ -37,5 +37,5 @@ export default function UserList() {
         <UserItem user={user} key={user} />
       ))}
     </ul>
-  )
+  );
 }

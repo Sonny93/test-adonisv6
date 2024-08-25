@@ -1,7 +1,7 @@
-type TransportDirection = 'send' | 'recv'
+type TransportDirection = 'send' | 'recv';
 
 type ProducerMedia = {
-  producerId: Producer['id']
-  kind: 'audio' | 'video'
-  user: User
-}
+  producerId: Producer['id'];
+  kind: 'audio' | 'video';
+  user: User;
+};

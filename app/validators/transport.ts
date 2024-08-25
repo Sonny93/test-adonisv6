@@ -1,4 +1,4 @@
-import vine from '@vinejs/vine'
+import vine from '@vinejs/vine';
 
 export const connectTransportValidator = vine.compile(
   vine.object({
@@ -12,7 +12,7 @@ export const connectTransportValidator = vine.compile(
       role: vine.string().trim(),
     }),
   })
-)
+);
 
 // export const produceTransportValidator = vine.compile(
 //   vine.object({

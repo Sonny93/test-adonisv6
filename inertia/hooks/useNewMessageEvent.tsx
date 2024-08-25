@@ -1,12 +1,12 @@
-import useSubscribe from './useSubscribe.js'
+import useSubscribe from './useSubscribe.js';
 
 type MessageEventData = {
-  type: 'user' | 'system'
-} & Message
+  type: 'user' | 'system';
+} & Message;
 
 export default function useNewMessageEvent(
   channelId: Channel['id'],
   cb: (newData: MessageEventData) => void
 ) {
-  useSubscribe<MessageEventData>(`channels/${channelId}/messages`, cb)
+  useSubscribe<MessageEventData>(`channels/${channelId}/messages`, cb);
 }

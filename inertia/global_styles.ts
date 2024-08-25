@@ -1,4 +1,4 @@
-import { css } from '@emotion/react'
+import { css } from '@emotion/react';
 
 export const cssReset = css({
   '*': {
@@ -21,22 +21,22 @@ export const cssReset = css({
     border: 0,
   },
 
-  'a': {
-    'width': 'fit-content',
-    'color': '#3f88c5',
-    'textDecoration': 'none',
-    'borderBottom': '1px solid transparent',
+  a: {
+    width: 'fit-content',
+    color: '#3f88c5',
+    textDecoration: 'none',
+    borderBottom: '1px solid transparent',
 
     '&:hover': {
       borderBottom: '1px solid',
     },
   },
 
-  'b': {
+  b: {
     fontWeight: 600,
     letterSpacing: '0.5px',
   },
-})
+});
 
 export const htmlBodyStyle = css({
   'html, body, main': {
@@ -50,4 +50,4 @@ export const htmlBodyStyle = css({
     flexDirection: 'column',
     transition: 'background-image 0.15s ease-in-out',
   },
-})
+});

@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react'
+import { Link } from '@inertiajs/react';
 
 export default function Error404() {
   return (
@@ -7,5 +7,5 @@ export default function Error404() {
       <p>La page est introuvable</p>
       <Link href="/">revenir à l'accueil</Link>
     </div>
-  )
+  );
 }

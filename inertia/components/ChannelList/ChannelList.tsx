@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react'
+import { Link } from '@inertiajs/react';
 
 export default function ChannelList({ channels }: { channels: Channel[] }) {
   return (
@@ -7,7 +7,7 @@ export default function ChannelList({ channels }: { channels: Channel[] }) {
         <ChannelItem channel={channel} key={channel.id} />
       ))}
     </ul>
-  )
+  );
 }
 
 function ChannelItem({ channel }: { channel: Channel }) {
@@ -19,5 +19,5 @@ function ChannelItem({ channel }: { channel: Channel }) {
     >
       <Link href={`/channels/${channel.id}`}>{channel.name}</Link>
     </li>
-  )
+  );
 }
