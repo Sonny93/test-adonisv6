@@ -9,7 +9,7 @@ import useUser from '~/hooks/useUser';
 import {
   handleConsume,
   handleCreateConsumeTransport,
-} from '~/lib/consume-transport.js';
+} from '~/lib/consume_transport.js';
 import type { NewMediaTransport } from '~/types/transport';
 import { MediaTransportVideo } from './media_transport_video.js';
 
