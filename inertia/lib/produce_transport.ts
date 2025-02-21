@@ -50,6 +50,7 @@ function handleProduce(
       clientRtpCapabilities: device.rtpCapabilities,
     }),
   })
-    .then((produceId) => callback({ id: produceId }))
+    .then((response) => response.json())
+    .then(({ produceId }) => callback({ id: produceId }))
     .catch(errback);
 }
