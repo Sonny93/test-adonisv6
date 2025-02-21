@@ -15,7 +15,12 @@ import { middleware } from './kernel.js';
 const RtpController = () => import('#controllers/rtp_controller');
 const ChannelsController = () => import('#controllers/channels_controller');
 
-transmit.registerRoutes();
+transmit.registerRoutes((route) => {
+  if (route.getPattern() === '__transmit/events') {
+    route.middleware(middleware.auth());
+    return;
+  }
+});
 
 router.get('/discord/redirect', [UserController, 'discord']);
 router.get('/discord/callback', [UserController, 'callbackAuth']);
