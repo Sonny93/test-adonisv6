@@ -1,10 +1,10 @@
 import { useForm } from '@inertiajs/react';
+import { Button, TextInput } from '@mantine/core';
 import { FormEvent, useMemo, type ChangeEvent } from 'react';
 import useChannel from '~/hooks/useChannel';
 import { makeRequest } from '~/lib/request.js';
-import { Button, FormControl, FormErrorMessage, Input } from '@chakra-ui/react';
 
-export default function CreateMessageForm() {
+export function CreateMessageForm() {
   const { channel } = useChannel();
   const { data, setData, reset, processing, errors, hasErrors } = useForm({
     content: '',
@@ -34,26 +34,22 @@ export default function CreateMessageForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FormControl isInvalid={hasErrors}>
-        <Input
-          type="text"
-          onChange={handleInputChange}
-          value={data.content}
-          placeholder={`Your message in #${channel.name}`}
-          maxLength={5000}
-          autoFocus
-        />
-        {hasErrors && errors?.content && (
-          <FormErrorMessage>{errors.content}</FormErrorMessage>
-        )}
-        <Button
-          css={{ display: 'none' }}
-          type="submit"
-          disabled={isFormDisabled}
-        >
-          send
-        </Button>
-      </FormControl>
+      <TextInput
+        error={hasErrors && errors.content}
+        type="text"
+        onChange={handleInputChange}
+        value={data.content}
+        placeholder={`Your message in #${channel.name}`}
+        maxLength={5000}
+        autoFocus
+      />
+      <Button
+        style={{ display: 'none' }}
+        type="submit"
+        disabled={isFormDisabled}
+      >
+        send
+      </Button>
     </form>
   );
 }

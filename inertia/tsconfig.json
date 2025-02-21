@@ -2,14 +2,22 @@
   "extends": "@adonisjs/tsconfig/tsconfig.client.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "jsxImportSource": "@emotion/react",
     "module": "ESNext",
     "jsx": "react-jsx",
     "paths": {
-      "~/*": ["./*"],
-      "@/*": ["../*"]
+      "~/*": [
+        "./*"
+      ],
+      "@/*": [
+        "../*"
+      ]
     },
-    "types": ["vite/client", "@emotion/styled", "@emotion/react"]
+    "types": [
+      "vite/client"
+    ]
   },
-  "include": ["./**/*.ts", "./**/*.tsx"]
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx"
+  ]
 }

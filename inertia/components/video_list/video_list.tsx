@@ -1,6 +1,6 @@
 import type { Producer } from 'mediasoup-client/lib/Producer';
 import { useEffect } from 'react';
-import ButtonProduceVideo from '~/components/VideoList/ButtonProduceVideo.js';
+import ButtonProduceVideo from '~/components/video_list/button_produce_video.js';
 import useChannel from '~/hooks/useChannel';
 import useMediaTransports from '~/hooks/useMediaTransports';
 import useRtpDevice from '~/hooks/useRtpDevice';
@@ -11,13 +11,9 @@ import {
   handleCreateConsumeTransport,
 } from '~/lib/consume-transport.js';
 import type { NewMediaTransport } from '~/types/transport';
-import MediaTransportVideo from './MediaTransportVideo.js';
+import { MediaTransportVideo } from './media_transport_video.js';
 
-export default function VideoList({
-  producers,
-}: {
-  producers: NewMediaTransport[];
-}) {
+export function VideoList({ producers }: { producers: NewMediaTransport[] }) {
   const { channel } = useChannel();
   const { device } = useRtpDevice();
   const { user } = useUser();
@@ -73,23 +69,12 @@ export default function VideoList({
   };
 
   return (
-    <ul
-      css={{
-        height: '100%',
-        width: '100%',
-        fontSize: '.85em',
-        padding: '.85em',
-        display: 'flex',
-        justifyContent: 'space-between',
-        overflow: 'auto',
-        border: '1px solid #dadce0',
-      }}
-    >
-      <li css={{ width: '30%' }}>
+    <ul>
+      <li>
         <ButtonProduceVideo />
       </li>
       {mediaTransports.map((mediaTransport) => (
-        <li key={mediaTransport.stream.id} css={{ width: '30%' }}>
+        <li key={mediaTransport.stream.id}>
           <MediaTransportVideo
             {...mediaTransport}
             removeMediaTransport={removeMediaTransport}

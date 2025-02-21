@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import useChannel from '~/hooks/useChannel';
 import useRtpDevice from '~/hooks/useRtpDevice';
 import useStream from '~/hooks/useStream';
 import useUser from '~/hooks/useUser';
 import { handleCreateProduceTransport } from '~/lib/produce-transport.js';
 import type { MediaTransport } from '~/types/transport';
-import { useState } from 'react';
-import MediaTransportVideo from './MediaTransportVideo.js';
+import { MediaTransportVideo } from './media_transport_video.js';
 
 export default function ButtonProduceVideo() {
   const { createStream } = useStream({ screenShare: true });

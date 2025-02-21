@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import useChannel from '~/hooks/useChannel';
 import useMessages from '~/hooks/useMessages';
 import useNewMessageEvent from '~/hooks/useNewMessageEvent';
-import MessageItem from './MessageItem.js';
+import { MessageItem } from './message_item.js';
 
 export default function MessageList() {
   const { messages, addMessage } = useMessages();
@@ -22,18 +22,7 @@ export default function MessageList() {
   useEffect(() => scrollBottom(false), []);
 
   return (
-    <ul
-      ref={ref}
-      css={{
-        width: '100%',
-        padding: '.5em',
-        display: 'flex',
-        flex: 1,
-        gap: '.75em',
-        flexDirection: 'column',
-        overflow: 'auto',
-      }}
-    >
+    <ul ref={ref}>
       {messages.map((message) => (
         <MessageItem message={message} key={message.id} />
       ))}

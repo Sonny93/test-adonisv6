@@ -1,7 +1,8 @@
+import { Avatar } from '@mantine/core';
 import { useEffect } from 'react';
-import RoundedImage from '../RoundedImage.js';
+import { User } from '~/types/index.js';
 
-export default function TypingItem({
+export function TypingItem({
   user,
   expiration,
   removeUser,
@@ -22,10 +23,10 @@ export default function TypingItem({
 
   return (
     <span>
-      <RoundedImage
+      <Avatar
         src={user.avatarUrl}
         size={20}
-        css={{ verticalAlign: 'sub', fontSize: '.85em' }}
+        style={{ verticalAlign: 'sub', fontSize: '.85em' }}
       />{' '}
       {user.nickName}
     </span>

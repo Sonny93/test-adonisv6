@@ -1,13 +1,14 @@
+import { Fragment, useState } from 'react';
 import useChannel from '~/hooks/useChannel';
 import useNewMessageEvent from '~/hooks/useNewMessageEvent';
 import useSubscribe from '~/hooks/useSubscribe';
 import useUser from '~/hooks/useUser';
-import { Fragment, useState } from 'react';
-import TypingItem from './TypingItem.js';
+import { User } from '~/types/index.js';
+import { TypingItem } from './typing_indicator_item.js';
 
 const REMOVE_DELAY = 3000;
 
-export default function WhosTyping() {
+export function WhosTyping() {
   const { channel } = useChannel();
   const [typings, setTypings] = useState<{ user: User; expiration: number }[]>(
     []
@@ -48,15 +49,7 @@ export default function WhosTyping() {
 
   const label = typings.length === 1 ? 'is typing' : 'are typings';
   return (
-    <div
-      css={{
-        fontSize: '.85em',
-        height: '20px',
-        marginTop: '.35em',
-        padding: '0.3em 0.5em',
-        boxSizing: 'content-box',
-      }}
-    >
+    <div>
       {typings.map(({ user, expiration }, index) => (
         <Fragment key={user.id}>
           {!!index && ', '}

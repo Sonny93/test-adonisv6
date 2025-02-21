@@ -1,26 +1,33 @@
-import styled from '@emotion/styled';
+import { Avatar, Box, Button, Group, Stack, Text } from '@mantine/core';
 import type { Transport } from 'mediasoup-client/lib/Transport';
 import { useEffect, useRef, useState } from 'react';
 import type { MediaTransportsContextType } from '~/contexts/mediaTransportsContext';
 import useUser from '~/hooks/useUser';
 import type { MediaTransport } from '~/types/transport';
-import RoundedImage from '../RoundedImage.js';
 
-const OverlayElement = styled.div({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  height: '100%',
-  width: '100%',
-  color: '#fff',
-  fontSize: '24px',
-  backgroundColor: 'rgba(0, 0, 0, .5)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-});
+function Overlay({ children }: { children: React.ReactNode }) {
+  return (
+    <Box
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: '100%',
+        color: '#fff',
+        fontSize: 24,
+        backgroundColor: 'rgba(0, 0, 0, .5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {children}
+    </Box>
+  );
+}
 
-export default function MediaTransportVideo({
+export function MediaTransportVideo({
   stream,
   transport,
   user,
@@ -68,39 +75,41 @@ export default function MediaTransportVideo({
   }, []);
 
   return (
-    <>
-      <div
-        css={{
+    <Stack gap="xs">
+      <Box
+        style={{
           position: 'relative',
           width: '100%',
-          borderRadius: '5px',
+          borderRadius: 5,
           overflow: 'hidden',
         }}
       >
         <video
-          css={{ width: '100%' }}
+          style={{ width: '100%' }}
           ref={videoRef}
           onCanPlayThrough={() => setVideoLoading(false)}
         />
-        {videoLoading && <OverlayElement>Loading</OverlayElement>}
+        {videoLoading && <Overlay>Loading</Overlay>}
         {!videoLoading && !canAutoPlay && (
-          <OverlayElement>
-            <button
+          <Overlay>
+            <Button
               onClick={() => {
                 setCanAutoPlay(true);
                 playVideo();
               }}
             >
               Click to play video
-            </button>
-          </OverlayElement>
+            </Button>
+          </Overlay>
         )}
-      </div>
-      <p>Conn. state: {connectionState}</p>
-      <p css={{ display: 'flex', gap: '.35em', alignItems: 'center' }}>
-        <RoundedImage src={user.avatarUrl} size={24} /> {user.name}{' '}
-        {currentUser.id === user.id && '(you)'}
-      </p>
-    </>
+      </Box>
+      <Text>Conn. state: {connectionState}</Text>
+      <Group>
+        <Avatar src={user?.avatarUrl} size={24} />
+        <Text>
+          {user?.name} {currentUser.id === user.id && '(you)'}
+        </Text>
+      </Group>
+    </Stack>
   );
 }

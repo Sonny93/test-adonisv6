@@ -1,24 +1,19 @@
-import { Container, Heading } from '@chakra-ui/react';
-import ChannelList from '~/components/ChannelList/ChannelList';
-import CreateChannelForm from '~/components/CreateChannelForm';
-import Navbar from '~/components/Navbar';
+import { Container, Stack, Title } from '@mantine/core';
+import { ChannelList } from '~/components/channel/channel_list';
+import CreateChannelForm from '~/components/create_channel_form';
+import DefaultLayout from '~/layouts/default_layout';
+import { Channel } from '~/types';
 
-export default function Home({ channels }: { channels: Channel[] }) {
-  return (
-    <Container css={{ margin: 0 }}>
-      <Navbar />
-      <div
-        css={{
-          padding: '1em',
-          display: 'flex',
-          gap: '.75em',
-          flexDirection: 'column',
-        }}
-      >
-        <Heading>List of channels</Heading>
-        <CreateChannelForm />
-        <ChannelList channels={channels} />
-      </div>
-    </Container>
-  );
-}
+const Home = ({ channels }: { channels: Channel[] }) => (
+  <Container>
+    <Stack>
+      <Title>List of channels</Title>
+      <CreateChannelForm />
+      <ChannelList channels={channels} />
+    </Stack>
+  </Container>
+);
+
+Home.layout = (page: any) => <DefaultLayout>{page}</DefaultLayout>;
+
+export default Home;

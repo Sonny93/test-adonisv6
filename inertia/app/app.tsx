@@ -1,10 +1,10 @@
 /// <reference path="../../adonisrc.ts" />
 /// <reference path="../../config/inertia.ts" />
 
-import { hydrateRoot } from 'react-dom/client';
-import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from '@adonisjs/inertia/helpers';
-import BaseLayout from '~/layouts/_base_layout';
+import { createInertiaApp } from '@inertiajs/react';
+import { hydrateRoot } from 'react-dom/client';
+import { BaseLayout } from '~/layouts/_base_layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'instant-messaging-app';
 
