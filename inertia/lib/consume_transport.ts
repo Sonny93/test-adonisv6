@@ -1,4 +1,9 @@
-import type { ConnectionState, Device } from 'mediasoup-client/lib/types';
+import type {
+  ConnectionState,
+  Device,
+  RtpCapabilities,
+} from 'mediasoup-client/lib/types';
+import { Channel } from '~/types/index.js';
 import { createTransport, handleConnect } from './transport.js';
 
 export async function handleCreateConsumeTransport({
@@ -23,18 +28,21 @@ export async function handleCreateConsumeTransport({
 
 export async function handleConsume(
   channel: Channel,
-  { clientRtpCapabilities, producerId }
+  {
+    clientRtpCapabilities,
+    producerId,
+  }: { clientRtpCapabilities: RtpCapabilities; producerId: string }
 ) {
-  return await (
-    await fetch(`/transport/${channel.id}/consume`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        clientRtpCapabilities,
-        producerId,
-      }),
-    })
-  ).json();
+  const response = await fetch(`/transport/${channel.id}/consume`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      clientRtpCapabilities,
+      producerId,
+    }),
+  });
+
+  return response.json();
 }

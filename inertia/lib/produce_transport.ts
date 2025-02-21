@@ -1,5 +1,9 @@
 import type { Device } from 'mediasoup-client';
-import type { ConnectionState } from 'mediasoup-client/lib/types';
+import type {
+  ConnectionState,
+  RtpParameters,
+} from 'mediasoup-client/lib/types';
+import { Channel } from '~/types/index.js';
 import { createTransport, handleConnect } from './transport.js';
 
 export async function handleCreateProduceTransport({
@@ -31,9 +35,9 @@ export async function handleCreateProduceTransport({
 function handleProduce(
   channel: Channel,
   device: Device,
-  { kind, rtpParameters },
-  callback,
-  errback
+  { kind, rtpParameters }: { kind: any; rtpParameters: RtpParameters },
+  callback: (produceId: { id: string }) => void,
+  errback: (error: Error) => void
 ) {
   fetch(`/transport/${channel.id}/produce`, {
     method: 'POST',
