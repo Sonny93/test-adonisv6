@@ -5,7 +5,7 @@ import useChannel from '~/hooks/useChannel';
 import useMediaTransports from '~/hooks/useMediaTransports';
 import useRtpDevice from '~/hooks/useRtpDevice';
 import useSubscribe from '~/hooks/useSubscribe';
-import useUser from '~/hooks/useUser';
+import { useAuth } from '~/hooks/use_auth.js';
 import {
   handleConsume,
   handleCreateConsumeTransport,
@@ -16,7 +16,7 @@ import { MediaTransportVideo } from './media_transport_video.js';
 export function VideoList({ producers }: { producers: NewMediaTransport[] }) {
   const { channel } = useChannel();
   const { device } = useRtpDevice();
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const { mediaTransports, addMediaTransport, removeMediaTransport } =
     useMediaTransports();

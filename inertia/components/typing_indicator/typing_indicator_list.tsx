@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react';
 import useChannel from '~/hooks/useChannel';
 import useNewMessageEvent from '~/hooks/useNewMessageEvent';
 import useSubscribe from '~/hooks/useSubscribe';
-import useUser from '~/hooks/useUser';
+import { useAuth } from '~/hooks/use_auth.js';
 import { User } from '~/types/index.js';
 import { TypingItem } from './typing_indicator_item.js';
 
@@ -14,7 +14,7 @@ export function WhosTyping() {
   const [typings, setTypings] = useState<{ user: User; expiration: number }[]>(
     []
   );
-  const { user: currentUser } = useUser();
+  const { user: currentUser } = useAuth();
 
   useSubscribe<{ user: User }>(`channels/${channel.id}/typing`, ({ user }) => {
     if (currentUser?.id === user.id) return;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useChannel from '~/hooks/useChannel';
 import useRtpDevice from '~/hooks/useRtpDevice';
 import useStream from '~/hooks/useStream';
-import useUser from '~/hooks/useUser';
+import { useAuth } from '~/hooks/use_auth.js';
 import { handleCreateProduceTransport } from '~/lib/produce_transport.js';
 import type { MediaTransport } from '~/types/transport';
 import { MediaTransportVideo } from './media_transport_video.js';
@@ -11,7 +11,7 @@ export default function ButtonProduceVideo() {
   const { createStream } = useStream({ screenShare: true });
   const { channel } = useChannel();
   const { device } = useRtpDevice();
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const [mediaTransport, setMediaTransport] = useState<MediaTransport | null>(
     null

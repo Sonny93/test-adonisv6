@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Group, Stack, Text } from '@mantine/core';
 import type { Transport } from 'mediasoup-client/lib/Transport';
 import { useEffect, useRef, useState } from 'react';
 import type { MediaTransportsContextType } from '~/contexts/mediaTransportsContext';
-import useUser from '~/hooks/useUser';
+import { useAuth } from '~/hooks/use_auth';
 import type { MediaTransport } from '~/types/transport';
 
 function Overlay({ children }: { children: React.ReactNode }) {
@@ -37,7 +37,7 @@ export function MediaTransportVideo({
 }: MediaTransport & {
   removeMediaTransport?: MediaTransportsContextType['removeMediaTransport'];
 }) {
-  const { user: currentUser } = useUser();
+  const { user: currentUser } = useAuth();
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [connectionState, setConnectionState] = useState<

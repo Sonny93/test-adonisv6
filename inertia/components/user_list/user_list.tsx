@@ -1,10 +1,11 @@
-import { Avatar, List, ThemeIcon } from '@mantine/core';
+import { List, ThemeIcon } from '@mantine/core';
 import { useState } from 'react';
 import useChannel from '~/hooks/useChannel.js';
 import useSubscribe from '~/hooks/useSubscribe';
 import type { User } from '~/types/index.js';
 
 import { CiUser } from 'react-icons/ci';
+import { UserItem } from '~/components/user_list/user_item';
 
 type NewUserData = {
   user: User;
@@ -50,16 +51,7 @@ export function UserList(props: { users: User[] }) {
       }
     >
       {users.map((user) => (
-        <List.Item
-          key={user.id}
-          icon={
-            <ThemeIcon color="blue" size={24} radius="xl">
-              <Avatar src={user.avatarUrl} size={24} />
-            </ThemeIcon>
-          }
-        >
-          {user.nickName}
-        </List.Item>
+        <UserItem key={user.id} user={user} />
       ))}
     </List>
   );
