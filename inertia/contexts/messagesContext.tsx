@@ -1,4 +1,5 @@
 import { createContext, useState, type ReactNode } from 'react';
+import { Message } from '~/types';
 
 type MessagesContextType = {
   messages: Message[];

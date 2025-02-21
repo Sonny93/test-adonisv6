@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { Stack } from '@mantine/core';
+import { useRef } from 'react';
 import useChannel from '~/hooks/useChannel';
 import useMessages from '~/hooks/useMessages';
 import useNewMessageEvent from '~/hooks/useNewMessageEvent';
@@ -7,7 +8,7 @@ import { MessageItem } from './message_item.js';
 export default function MessageList() {
   const { messages, addMessage } = useMessages();
   const { channel } = useChannel();
-  const ref = useRef<HTMLUListElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const scrollBottom = (smooth = true) =>
     ref.current?.scrollTo({
@@ -19,13 +20,11 @@ export default function MessageList() {
     setTimeout(scrollBottom);
   });
 
-  useEffect(() => scrollBottom(false), []);
-
   return (
-    <ul ref={ref}>
+    <Stack ref={ref}>
       {messages.map((message) => (
         <MessageItem message={message} key={message.id} />
       ))}
-    </ul>
+    </Stack>
   );
 }

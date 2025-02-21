@@ -1,7 +1,6 @@
-import { Avatar, Stack, Text } from '@mantine/core';
+import { Avatar, Box, Group, Text } from '@mantine/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { MessageDate } from '~/components/message/message_item_date.js';
 import { Message } from '~/types/index.js';
 dayjs.extend(relativeTime);
 
@@ -12,19 +11,20 @@ export function MessageItem({ message }: Readonly<{ message: Message }>) {
   }
 
   return (
-    <li>
-      <Avatar
-        src={user?.avatarUrl}
-        alt={`${user?.nickName}'s avatar`}
-        size={24}
-      />
-      <Stack>
-        <Text>
-          {user?.nickName} - <MessageDate message={message} />
-        </Text>
-        <Text>{content}</Text>
-      </Stack>
-    </li>
+    <Box>
+      <Group>
+        <Avatar src={user?.avatarUrl} alt={user?.nickName} />
+        <div>
+          <Text size="sm">{user?.nickName}</Text>
+          <Text size="xs" c="dimmed">
+            {dayjs(message.createdAt).fromNow()}
+          </Text>
+        </div>
+      </Group>
+      <Text pl={54} pt="sm" size="sm">
+        {content}
+      </Text>
+    </Box>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Avatar } from '@mantine/core';
+import { Avatar, Group, Text } from '@mantine/core';
 import { useEffect } from 'react';
 import { User } from '~/types/index.js';
 
@@ -22,13 +22,9 @@ export function TypingItem({
   }, [expiration]);
 
   return (
-    <span>
-      <Avatar
-        src={user.avatarUrl}
-        size={20}
-        style={{ verticalAlign: 'sub', fontSize: '.85em' }}
-      />{' '}
-      {user.nickName}
-    </span>
+    <Group gap={2}>
+      <Avatar src={user.avatarUrl} size="xs" />
+      <Text size="xs">{user.nickName}</Text>
+    </Group>
   );
 }

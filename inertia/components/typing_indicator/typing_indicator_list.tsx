@@ -1,3 +1,4 @@
+import { Group, Text } from '@mantine/core';
 import { Fragment, useState } from 'react';
 import useChannel from '~/hooks/useChannel';
 import useNewMessageEvent from '~/hooks/useNewMessageEvent';
@@ -47,9 +48,9 @@ export function WhosTyping() {
     });
   }
 
-  const label = typings.length === 1 ? 'is typing' : 'are typings';
+  const label = typings.length === 1 ? 'is typing' : 'are typing';
   return (
-    <div>
+    <Group gap={2} style={{ position: 'absolute', bottom: 0, left: 0 }} pl="md">
       {typings.map(({ user, expiration }, index) => (
         <Fragment key={user.id}>
           {!!index && ', '}
@@ -60,7 +61,7 @@ export function WhosTyping() {
           />
         </Fragment>
       ))}{' '}
-      {typings.length !== 0 && label}
-    </div>
+      <Text size="xs">{typings.length !== 0 && label}</Text>
+    </Group>
   );
 }
