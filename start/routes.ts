@@ -10,9 +10,12 @@
 const MessagesController = () => import('#controllers/messages_controller');
 const UserController = () => import('#controllers/user_controller');
 import router from '@adonisjs/core/services/router';
+import transmit from '@adonisjs/transmit/services/main';
 import { middleware } from './kernel.js';
 const RtpController = () => import('#controllers/rtp_controller');
 const ChannelsController = () => import('#controllers/channels_controller');
+
+transmit.registerRoutes();
 
 router.get('/discord/redirect', [UserController, 'discord']);
 router.get('/discord/callback', [UserController, 'callbackAuth']);

@@ -6,7 +6,7 @@ import { connectTransportValidator } from '#validators/transport';
 import { HttpContext } from '@adonisjs/core/http';
 import logger from '@adonisjs/core/services/logger';
 import transmit from '@adonisjs/transmit/services/main';
-import { WebRtcTransport } from 'mediasoup/node/lib/WebRtcTransport.js';
+import { WebRtcTransport } from 'mediasoup/node/lib/WebRtcTransportTypes.js';
 
 const producers: ProducerMedia[] = [];
 

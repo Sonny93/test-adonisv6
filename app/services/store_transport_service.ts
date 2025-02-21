@@ -1,5 +1,5 @@
 import User from '#models/user';
-import { Transport } from 'mediasoup/node/lib/Transport.js';
+import { Transport } from 'mediasoup/node/lib/TransportTypes.js';
 
 class StoreTransportService {
   sendTransports = new Map<User['id'], Transport>();
