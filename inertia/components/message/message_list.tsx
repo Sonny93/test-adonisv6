@@ -1,5 +1,6 @@
 import { Stack } from '@mantine/core';
 import { useRef } from 'react';
+import { TimerProvider } from '~/contexts/time_provider.js';
 import useChannel from '~/hooks/useChannel';
 import useMessages from '~/hooks/useMessages';
 import useNewMessageEvent from '~/hooks/useNewMessageEvent';
@@ -22,9 +23,11 @@ export default function MessageList() {
 
   return (
     <Stack ref={ref}>
-      {messages.map((message) => (
-        <MessageItem message={message} key={message.id} />
-      ))}
+      <TimerProvider>
+        {messages.map((message) => (
+          <MessageItem message={message} key={message.id} />
+        ))}
+      </TimerProvider>
     </Stack>
   );
 }
