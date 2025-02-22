@@ -31,7 +31,6 @@ export function UserList(props: { users: User[] }) {
       setUsers((propsUsers) => {
         const newNusers = [...propsUsers];
         const userIndex = newNusers.findIndex((u) => u.id === userId);
-        console.log('remove', newNusers, userId, userIndex);
         if (userIndex !== -1) {
           newNusers.splice(userIndex, 1);
         }

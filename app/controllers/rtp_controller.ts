@@ -142,17 +142,17 @@ export default class RtpController {
     direction: TransportDirection
   ): void {
     transport.on('trace', (trace) =>
-      console.log(`${user!.nickName} trace: ${trace}`)
+      logger.debug(`${user!.nickName} trace: ${trace}`)
     );
     transport.on('icestatechange', (connectionState) =>
-      console.log(`${user!.nickName} ice connection state: ${connectionState}`)
+      logger.debug(`${user!.nickName} ice connection state: ${connectionState}`)
     );
     transport.on('dtlsstatechange', (connectionState) => {
-      console.log(
+      logger.debug(
         `${user!.nickName} dtls connection state: ${connectionState}`
       );
       if (connectionState === 'closed') {
-        console.log(`${user!.nickName} delete transport`);
+        logger.debug(`${user!.nickName} delete transport`);
         transport.close();
         this.storeTransportService.deleteTransport(user!.id, direction);
       }
