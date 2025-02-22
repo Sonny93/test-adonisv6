@@ -11,7 +11,7 @@ export default class MessagesController {
 
   async index({ inertia }: HttpContext) {
     const channels = await this.channelController.getAllChannels();
-    return inertia.render('home', { channels });
+    return inertia.render('home', { channels: channels.reverse() });
   }
 
   async createMessage({ request, response, auth }: HttpContext) {

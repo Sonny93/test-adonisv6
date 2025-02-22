@@ -1,10 +1,17 @@
+import { SimpleGrid } from '@mantine/core';
 import { ChannelItem } from '~/components/channel/channel_item';
-import { Channel } from '~/types';
+import { TimerProvider } from '~/contexts/time_provider';
+import { ChannelWithMessages } from '~/types';
 
-export const ChannelList = ({ channels }: { channels: Channel[] }) => (
-  <ul>
-    {channels.map((channel) => (
-      <ChannelItem channel={channel} key={channel.id} />
-    ))}
-  </ul>
+interface ChannelListProps {
+  channels: ChannelWithMessages[];
+}
+export const ChannelList = ({ channels }: ChannelListProps) => (
+  <SimpleGrid cols={3}>
+    <TimerProvider>
+      {channels.map((channel) => (
+        <ChannelItem channel={channel} key={channel.id} />
+      ))}
+    </TimerProvider>
+  </SimpleGrid>
 );

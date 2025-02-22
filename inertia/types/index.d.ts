@@ -24,6 +24,10 @@ export type Channel = {
   updatedAt: string;
 };
 
+export type ChannelWithMessages = Channel & {
+  messages: Message[];
+};
+
 export type ChannelExtended = Channel & {
   author: User;
   users: User[];

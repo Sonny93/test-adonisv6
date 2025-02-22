@@ -12,7 +12,10 @@ export default class ChannelsController {
   constructor(protected rtpController: RtpController) {}
 
   async getAllChannels() {
-    return await Channel.all();
+    const channels = await Channel.query()
+      .preload('messages')
+      .preload('author');
+    return channels;
   }
 
   async create({ request, auth, response }: HttpContext) {
